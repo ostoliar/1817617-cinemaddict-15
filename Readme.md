@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Stoliar Oleksandr](https://up.htmlacademy.ru/ecmascript/15/user/1817617).
-* Наставник: `Неизвестно`.
+* Наставник: `Ruslan Malogulko`.
 
 ---
 
