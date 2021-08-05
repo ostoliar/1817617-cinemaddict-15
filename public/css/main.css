@@ -86,6 +86,7 @@ button {
   cursor: pointer;
 }
 
+
 .header {
   align-items: center;
   box-sizing: border-box;
@@ -361,6 +362,7 @@ button {
 
 .film-card__title {
   margin-right: 0.5em;
+  color: white;
 }
 
 .film-card__rating,
@@ -553,7 +555,17 @@ button {
   overflow: hidden;
 }
 
+.transparent {
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+}
+
 .film-details {
+  display: none;
   position: fixed;
   height: 100vh;
   top: 0;
