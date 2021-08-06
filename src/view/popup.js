@@ -161,5 +161,3 @@ export const createFilmPopupTemplate = () =>
         </div>
       </section>
 `;
-
-

@@ -76,6 +76,7 @@ if (cards.length > CARD_COUNT_PER_STEP) {
     if (renderedTaskCount >= cards.length) {
       loadMoreButton.remove();
     }
+
     tooglePopup();
   });
 }

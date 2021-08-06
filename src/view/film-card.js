@@ -1,6 +1,5 @@
 export const createFilmCardTemplate = (card) => {
-  const { name, description, poster, rating, year, duration, genre, comments } =
-    card;
+  const { name, description, poster, rating, year, duration, genre, comments } = card;
 
   return `<article class="film-card">
     <button class="transparent">
