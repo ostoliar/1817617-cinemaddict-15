@@ -1,17 +1,14 @@
 import {createElement} from '../utils.js';
 
+const createBoardTemplate = () => '<section class="board container"></section>';
 
-const createFilmsQuantity = () => (
-  '<p>130 291 movies inside</p>'
-);
-
-export default class FilmQuantity {
+export default class Board {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createFilmsQuantity();
+    return createBoardTemplate();
   }
 
   getElement() {
