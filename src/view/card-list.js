@@ -1,17 +1,14 @@
 import {createElement} from '../utils.js';
 
+const createTaskListTemplate = () => '<div class="films-list__container"></div>';
 
-const createFilmsQuantity = () => (
-  '<p>130 291 movies inside</p>'
-);
-
-export default class FilmQuantity {
+export default class CardList {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createFilmsQuantity();
+    return createTaskListTemplate();
   }
 
   getElement() {

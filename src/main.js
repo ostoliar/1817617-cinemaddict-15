@@ -1,41 +1,41 @@
-import {createMenuTemplate} from './view/menu.js';
-import {createFilterTemplate} from './view/filter.js';
-import {createProfileTemplate} from './view/profile.js';
-import {createFilmCardTemplate} from './view/film-card.js';
+import SiteMenuView from './view/menu.js';
+import FilmFilterView from './view/filter.js';
+import ProfileDetailsView from './view/profile.js';
+import FilmCardView from './view/film-card.js';
 import {generatefilmCard} from './mock/film-card.js';
-import {createShowMoreButton} from './view/show-more.js';
-import {createFilmsQuantity} from './view/films-quantity.js';
-import {createFilmPopupTemplate} from './view/popup.js';
+import ShowMoreButtonView from './view/show-more.js';
+import FilmQuantityView from './view/films-quantity.js';
+import FilmDetailsView from './view/popup.js';
+import {render, RenderPosition} from './utils.js';
+import BoardView from './view/board.js';
+import CardListView from './view/card-list.js';
+
 
 const CARD_COUNT = 20;
 const CARD_COUNT_PER_STEP = 5;
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
 
 const cards = new Array(CARD_COUNT).fill().map(generatefilmCard);
-
 const siteMainElement = document.querySelector('.main');
 
-render(siteMainElement, createMenuTemplate(), 'afterbegin');
-render(siteMainElement, createFilterTemplate(), 'afterbegin');
+const renderCard = (container, card) => {
+  const cardComponent = new FilmCardView(card);
+  render(container, cardComponent.getElement(), RenderPosition.BEFOREEND);
+};
+
+
+render(siteMainElement, new SiteMenuView().getElement(), RenderPosition.AFTERBEGIN);
+render(siteMainElement, new FilmFilterView().getElement(), RenderPosition.AFTERBEGIN);
 
 const headerElement = document.querySelector('.header');
 
-render(headerElement, createProfileTemplate(), 'beforeend');
-
-const filmListContainer = siteMainElement.querySelector('.films-list__container');
-
-for (let i = 0; i < CARD_COUNT_PER_STEP; i++) {
-  render(filmListContainer, createFilmCardTemplate(cards[i]), 'beforeend');
-}
+render(headerElement, new ProfileDetailsView().getElement(), RenderPosition.BEFOREEND);
 
 const quantityElement = document.querySelector('.footer__statistics');
 
-render(quantityElement, createFilmsQuantity(), 'beforeend');
-render(siteMainElement, createFilmPopupTemplate(), 'beforeend');
+render(quantityElement, new FilmQuantityView().getElement(), RenderPosition.BEFOREEND);
 
+render(siteMainElement, new FilmDetailsView().getElement(), RenderPosition.BEFOREEND);
 
 const popupSection = document.querySelector('.film-details');
 const closePopupButton = document.querySelector('.film-details__close-btn');
@@ -55,29 +55,42 @@ const tooglePopup = () => {
   });
 };
 
+const renderCards = (boardContainer, boardCards) => {
+  const boardComponent = new BoardView();
+  const cardListComponent = new CardListView();
 
-if (cards.length > CARD_COUNT_PER_STEP) {
-  let renderedTaskCount = CARD_COUNT_PER_STEP;
+  render(boardContainer, boardComponent.getElement(), RenderPosition.BEFOREEND);
+  render(boardComponent.getElement(), cardListComponent.getElement(), RenderPosition.BEFOREEND);
 
-  render(siteMainElement, createShowMoreButton(), 'beforeend');
 
-  const loadMoreButton = document.querySelector('.films-list__show-more');
+  boardCards
+    .slice(0, Math.min(cards.length, CARD_COUNT_PER_STEP))
+    .forEach((boardCard) => renderCard(cardListComponent.getElement(), boardCard));
 
-  tooglePopup();
+  if (cards.length > CARD_COUNT_PER_STEP) {
+    let renderedCardCount = CARD_COUNT_PER_STEP;
 
-  loadMoreButton.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    cards
-      .slice(renderedTaskCount, renderedTaskCount + CARD_COUNT_PER_STEP)
-      .forEach((card) => render(filmListContainer, createFilmCardTemplate(card), 'beforeend'));
+    const loadMoreButtonComponent = new ShowMoreButtonView();
 
-    renderedTaskCount += CARD_COUNT_PER_STEP;
-
-    if (renderedTaskCount >= cards.length) {
-      loadMoreButton.remove();
-    }
+    render(boardComponent.getElement(), loadMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
     tooglePopup();
-  });
-}
 
+    loadMoreButtonComponent.getElement().addEventListener('click', (evt) => {
+      evt.preventDefault();
+      cards
+        .slice(renderedCardCount, renderedCardCount + CARD_COUNT_PER_STEP)
+        .forEach((boardCard) => renderCard(cardListComponent.getElement(), boardCard));
 
+      renderedCardCount += CARD_COUNT_PER_STEP;
+
+      if (renderedCardCount >= cards.length) {
+        loadMoreButtonComponent.getElement().remove();
+        loadMoreButtonComponent.removeElement();
+      }
+      tooglePopup();
+
+    });
+  }
+};
+
+renderCards(siteMainElement, cards);
