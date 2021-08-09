@@ -19,8 +19,7 @@ const cards = new Array(CARD_COUNT).fill().map(generatefilmCard);
 const siteMainElement = document.querySelector('.main');
 
 const renderCard = (container, card) => {
-  const cardComponent = new FilmCardView(card);
-  render(container, cardComponent.getElement(), RenderPosition.BEFOREEND);
+  render(container, new FilmCardView(card).getElement(), RenderPosition.BEFOREEND);
 };
 
 
@@ -42,10 +41,18 @@ const closePopupButton = document.querySelector('.film-details__close-btn');
 const transparentButton = document.getElementsByClassName('transparent');
 
 const tooglePopup = () => {
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      popupSection.style.display = 'none';
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
   for (const item of transparentButton) {
     item.addEventListener('click', (evt) => {
       evt.preventDefault();
       popupSection.style.display = 'block';
+      document.addEventListener('keydown', onEscKeyDown);
     });
   }
 
@@ -87,6 +94,7 @@ const renderCards = (boardContainer, boardCards) => {
         loadMoreButtonComponent.getElement().remove();
         loadMoreButtonComponent.removeElement();
       }
+
       tooglePopup();
 
     });
