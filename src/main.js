@@ -6,7 +6,7 @@ import {generatefilmCard} from './mock/film-card.js';
 import ShowMoreButtonView from './view/show-more.js';
 import FilmQuantityView from './view/films-quantity.js';
 import FilmDetailsView from './view/popup.js';
-import {render, RenderPosition} from './utils.js';
+import {render, RenderPosition} from './utils/render.js';
 import BoardView from './view/board.js';
 import CardListView from './view/card-list.js';
 
@@ -82,8 +82,7 @@ const renderCards = (boardContainer, boardCards) => {
     render(boardComponent.getElement(), loadMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
     tooglePopup();
 
-    loadMoreButtonComponent.getElement().addEventListener('click', (evt) => {
-      evt.preventDefault();
+    loadMoreButtonComponent.setClickHandler(() => {
       cards
         .slice(renderedCardCount, renderedCardCount + CARD_COUNT_PER_STEP)
         .forEach((boardCard) => renderCard(cardListComponent.getElement(), boardCard));
