@@ -1,26 +1,18 @@
 import SiteMenuView from './view/menu.js';
 import FilmFilterView from './view/filter.js';
 import ProfileDetailsView from './view/profile.js';
-import FilmCardView from './view/film-card.js';
 import {generatefilmCard} from './mock/film-card.js';
-import ShowMoreButtonView from './view/show-more.js';
 import FilmQuantityView from './view/films-quantity.js';
 import FilmDetailsView from './view/popup.js';
 import {render, RenderPosition} from './utils/render.js';
-import BoardView from './view/board.js';
-import CardListView from './view/card-list.js';
+import BoardPresenter from './presenter/movie.js';
 
 
 const CARD_COUNT = 20;
-const CARD_COUNT_PER_STEP = 5;
 
 
-const cards = new Array(CARD_COUNT).fill().map(generatefilmCard);
+export const cards = new Array(CARD_COUNT).fill().map(generatefilmCard);
 const siteMainElement = document.querySelector('.main');
-
-const renderCard = (container, card) => {
-  render(container, new FilmCardView(card).getElement(), RenderPosition.BEFOREEND);
-};
 
 
 render(siteMainElement, new SiteMenuView().getElement(), RenderPosition.AFTERBEGIN);
@@ -40,7 +32,7 @@ const popupSection = document.querySelector('.film-details');
 const closePopupButton = document.querySelector('.film-details__close-btn');
 const transparentButton = document.getElementsByClassName('transparent');
 
-const tooglePopup = () => {
+export const tooglePopup = () => {
   const onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       popupSection.style.display = 'none';
@@ -62,42 +54,7 @@ const tooglePopup = () => {
   });
 };
 
-const renderCards = (boardContainer, boardCards) => {
-  const boardComponent = new BoardView();
-  const cardListComponent = new CardListView();
 
-  render(boardContainer, boardComponent.getElement(), RenderPosition.BEFOREEND);
-  render(boardComponent.getElement(), cardListComponent.getElement(), RenderPosition.BEFOREEND);
+const boardPresenter = new BoardPresenter(siteMainElement);
 
-
-  boardCards
-    .slice(0, Math.min(cards.length, CARD_COUNT_PER_STEP))
-    .forEach((boardCard) => renderCard(cardListComponent.getElement(), boardCard));
-
-  if (cards.length > CARD_COUNT_PER_STEP) {
-    let renderedCardCount = CARD_COUNT_PER_STEP;
-
-    const loadMoreButtonComponent = new ShowMoreButtonView();
-
-    render(boardComponent.getElement(), loadMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
-    tooglePopup();
-
-    loadMoreButtonComponent.setClickHandler(() => {
-      cards
-        .slice(renderedCardCount, renderedCardCount + CARD_COUNT_PER_STEP)
-        .forEach((boardCard) => renderCard(cardListComponent.getElement(), boardCard));
-
-      renderedCardCount += CARD_COUNT_PER_STEP;
-
-      if (renderedCardCount >= cards.length) {
-        loadMoreButtonComponent.getElement().remove();
-        loadMoreButtonComponent.removeElement();
-      }
-
-      tooglePopup();
-
-    });
-  }
-};
-
-renderCards(siteMainElement, cards);
+boardPresenter.init(cards);
