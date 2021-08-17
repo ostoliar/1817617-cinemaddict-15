@@ -11,9 +11,13 @@ const CARD_COUNT_PER_STEP = 5;
 export default class Board {
   constructor(cardContainer) {
     this._cardContainer = cardContainer;
+    this._renderedCardCount = CARD_COUNT_PER_STEP;
 
     this._boardComponent = new BoardView();
     this._cardListComponent = new CardListView();
+    this._loadMoreButtonComponent = new ShowMoreButtonView();
+
+    this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
   }
 
   init(boardCards) {
@@ -37,28 +41,23 @@ export default class Board {
   }
 
 
-  _renderLoadMoreButton() {
-    let renderedCardCount = CARD_COUNT_PER_STEP;
+  _handleLoadMoreButtonClick() {
+    this._renderCards(this._renderedCardCount, this._renderedCardCount + CARD_COUNT_PER_STEP);
+    this._renderedCardCount += CARD_COUNT_PER_STEP;
 
-    const loadMoreButtonComponent = new ShowMoreButtonView();
-
-    render(this._boardComponent, loadMoreButtonComponent, RenderPosition.BEFOREEND);
     tooglePopup();
 
-    loadMoreButtonComponent.setClickHandler(() => {
-      this._boardCards
-        .slice(renderedCardCount, renderedCardCount + CARD_COUNT_PER_STEP)
-        .forEach((boardCard) => this._renderCard(boardCard));
+    if (this._renderedCardCount >= this._boardCards.length) {
+      remove(this._loadMoreButtonComponent);
+    }
+  }
 
-      renderedCardCount += CARD_COUNT_PER_STEP;
+  _renderLoadMoreButton() {
+    render(this._boardComponent, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
 
-      if (renderedCardCount >= this._boardCards.length) {
-        remove(loadMoreButtonComponent);
-      }
+    tooglePopup();
 
-      tooglePopup();
-
-    });
+    this._loadMoreButtonComponent.setClickHandler(this._handleLoadMoreButtonClick);
   }
 
   _renderCardList() {
