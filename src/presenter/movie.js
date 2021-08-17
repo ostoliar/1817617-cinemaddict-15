@@ -1,9 +1,9 @@
-import FilmCardView from '../view/film-card.js';
 import ShowMoreButtonView from '../view/show-more.js';
 import {render, RenderPosition, remove} from '../utils/render.js';
 import {tooglePopup} from '../main.js';
 import BoardView from '../view/board.js';
 import CardListView from '../view/card-list.js';
+import CardPresenter from './card.js';
 
 const CARD_COUNT_PER_STEP = 5;
 
@@ -30,8 +30,8 @@ export default class Board {
   }
 
   _renderCard(card) {
-    const cardComponent = new FilmCardView(card);
-    render(this._cardListComponent, cardComponent, RenderPosition.BEFOREEND);
+    const cardPresenter = new CardPresenter(this._cardListComponent);
+    cardPresenter.init(card);
   }
 
   _renderCards(from, to) {
