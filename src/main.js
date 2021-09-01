@@ -5,12 +5,22 @@ import FilmQuantityView from './view/films-quantity.js';
 import FilmDetailsView from './view/popup.js';
 import {render, RenderPosition} from './utils/render.js';
 import BoardPresenter from './presenter/movie.js';
+import Api from './api.js';
 
 
 const CARD_COUNT = 20;
+const AUTHORIZATION = 'Basic SS7rl5fdGvhk7qb3t';
+const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict/';
 
 
 export const cards = new Array(CARD_COUNT).fill().map(generatefilmCard);
+
+const api = new Api(END_POINT, AUTHORIZATION);
+
+api.getFilms().then((cards) => {
+  console.log(cards);
+});
+
 const siteMainElement = document.querySelector('.main');
 
 
