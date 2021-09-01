@@ -1,12 +1,15 @@
 import ShowMoreButtonView from '../view/show-more.js';
 import {render, RenderPosition, remove} from '../utils/render.js';
+import {sortByDate, sortByRating} from '../utils/card.js';
 import {tooglePopup} from '../main.js';
 import BoardView from '../view/board.js';
 import CardListView from '../view/card-list.js';
+import SortView from '../view/filter.js';
 import CardPresenter from './card.js';
+import {SortType} from '../const.js';
 
 const CARD_COUNT_PER_STEP = 5;
-
+const siteMainElement = document.querySelector('.main');
 
 export default class Board {
   constructor(cardContainer) {
@@ -14,19 +17,43 @@ export default class Board {
     this._renderedCardCount = CARD_COUNT_PER_STEP;
 
     this._boardComponent = new BoardView();
+    this._sortComponent = new SortView();
     this._cardListComponent = new CardListView();
     this._loadMoreButtonComponent = new ShowMoreButtonView();
+    this._currentSortType = SortType.DEFAULT;
 
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
   }
 
   init(boardCards) {
     this._boardCards = boardCards.slice();
+    this._sourcedBoardCards = boardCards.slice();
 
     render(this._cardContainer, this._boardComponent, RenderPosition.BEFOREEND);
     render(this._boardComponent, this._cardListComponent, RenderPosition.BEFOREEND);
 
     this._renderBoard();
+    this._renderSort();
+  }
+
+
+  _sortTasks(sortType) {
+    switch (sortType) {
+      case SortType.DATE:
+        this._boardCards.sort(sortByDate);
+        break;
+      case SortType.RATING:
+        this._boardCards.sort(sortByRating);
+        break;
+      default:
+        this._boardCards = this._sourcedBoardCards.slice();
+    }
+
+    this._currentSortType = sortType;
+  }
+
+  _renderSort() {
+    render(siteMainElement, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderCard(card) {

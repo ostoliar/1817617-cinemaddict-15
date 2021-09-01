@@ -4,3 +4,8 @@ export const getRandomInteger = (a = 0, b = 1) => {
 
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
+
+export const getRandomItemFromArray = (items) => {
+  const index = getRandomInteger(0, items.length - 1);
+  return items[index];
+};

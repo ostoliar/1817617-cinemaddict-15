@@ -9,7 +9,6 @@ export default class Card {
     this._cardComponent = null;
   }
 
-
   init(card) {
     this._card = card;
 

@@ -1,5 +1,4 @@
 import SiteMenuView from './view/menu.js';
-import FilmFilterView from './view/filter.js';
 import ProfileDetailsView from './view/profile.js';
 import {generatefilmCard} from './mock/film-card.js';
 import FilmQuantityView from './view/films-quantity.js';
@@ -16,7 +15,6 @@ const siteMainElement = document.querySelector('.main');
 
 
 render(siteMainElement, new SiteMenuView().getElement(), RenderPosition.AFTERBEGIN);
-render(siteMainElement, new FilmFilterView().getElement(), RenderPosition.AFTERBEGIN);
 
 const headerElement = document.querySelector('.header');
 

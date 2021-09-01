@@ -1,4 +1,5 @@
 import {getRandomInteger} from '../utils/common.js';
+import {getRandomItemFromArray} from '../utils/common.js';
 
 const generateFilmName = () => {
   const films = [
@@ -10,9 +11,8 @@ const generateFilmName = () => {
     'Made for Each Other',
   ];
 
-  const randomIndex = getRandomInteger(0, films.length - 1);
+  return getRandomItemFromArray(films);
 
-  return films[randomIndex];
 };
 
 const generatePoster = () => {
@@ -26,9 +26,7 @@ const generatePoster = () => {
     './images/posters/the-man-with-the-golden-arm.jpg',
   );
 
-  const randomIndex = getRandomInteger(0, posters.length - 1);
-
-  return posters[randomIndex];
+  return getRandomItemFromArray(posters);
 };
 
 const generateDescription = () => {
@@ -46,9 +44,7 @@ const generateDescription = () => {
     'In rutrum ac purus sit amet tempus.',
   );
 
-  const randomIndex = getRandomInteger(0, descriptions.length - 1);
-
-  return descriptions[randomIndex];
+  return getRandomItemFromArray(descriptions);
 };
 
 const generateRating = () => getRandomInteger(0, 10);
@@ -67,9 +63,8 @@ const generateFilmGenre = () => {
     'Mystery',
   ];
 
-  const randomIndex = getRandomInteger(0, genres.length - 1);
+  return getRandomItemFromArray(genres);
 
-  return genres[randomIndex];
 };
 
 const generateFilmComments = () => getRandomInteger(0, 5);
@@ -84,4 +79,5 @@ export const generatefilmCard = () => ({
   duration: generateFilmDuration(),
   genre: generateFilmGenre(),
   comments: generateFilmComments(),
+  // country: generateCountry(),
 });
