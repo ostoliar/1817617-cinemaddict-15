@@ -6,22 +6,17 @@ import BoardView from '../view/board.js';
 import CardListView from '../view/card-list.js';
 import SortView from '../view/filter.js';
 import CardPresenter from './card.js';
-import {SortType} from '../const.js';
-
-const CARD_COUNT_PER_STEP = 5;
-const siteMainElement = document.querySelector('.main');
+import {SortType, CARD_COUNT_PER_STEP, siteMainElement} from '../const.js';
 
 export default class Board {
   constructor(cardContainer) {
     this._cardContainer = cardContainer;
     this._renderedCardCount = CARD_COUNT_PER_STEP;
-
     this._boardComponent = new BoardView();
     this._sortComponent = new SortView();
     this._cardListComponent = new CardListView();
     this._loadMoreButtonComponent = new ShowMoreButtonView();
     this._currentSortType = SortType.DEFAULT;
-
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
   }
 

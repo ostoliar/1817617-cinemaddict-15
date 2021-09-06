@@ -1,4 +1,4 @@
-import { isDateInPeriod } from './date.js';
+import { dateInPeriod } from './date.js';
 import { MAX_DESCRIPTION_LENGTH as MAX_DESCRIPTION_VALUE, StatisticPeriodValue } from '../const.js';
 
 
@@ -40,6 +40,6 @@ export const isFilmInWhatcingPeriod = (film, period) => {
 
   const { watchingDate } = film.userDetails;
 
-  return isDateInPeriod(watchingDate, period);
+  return dateInPeriod(watchingDate, period);
 };
 

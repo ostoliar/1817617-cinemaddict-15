@@ -1,9 +1,8 @@
-import { FilmsListOption, SortType, ClassName, UpdateType,
-  UserAction, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT
-} from '../const.js';
 import { render, remove, replace, rerender } from '../utils/render.js';
 import { sortByRating, sortByDate, filter } from '../utils/card.js';
-
+import { FilmsListOption, SortType, ClassName, UpdateType,
+  UserAction, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT, bodyElement
+} from '../const.js';
 import SortView from '../view/filter.js';
 import BoardView from '../view/board.js';
 import FilmsListView from '../view/card-list.js';
@@ -12,7 +11,6 @@ import ShowMoreButtonView from '../view/show-more.js';
 import FilmCardPresenter from './card.js';
 import FilmDetailsPresenter from './popup.js';
 
-const bodyElement = document.body;
 
 export default class FilmsPresenter {
   constructor(mainScreenContainer, filmsModel, filterModel, api) {
@@ -20,9 +18,7 @@ export default class FilmsPresenter {
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._api = api;
-
     this._mainFilmsCount = FILMS_STEP;
-
     this._sortView = null;
     this._filmsBoardView = null;
     this._mainFilmsContainerView = null;
@@ -32,15 +28,12 @@ export default class FilmsPresenter {
     this._topRatedFilmsListView = null;
     this._mostCommentedFilmsContainerView = null;
     this._mostCommentedFilmsListView = null;
-
     this._mainFilmPresenter = new Map();
     this._topRatedFilmPresenter = new Map();
     this._mostCommentedFilmPresenter = new Map();
     this._filmDetailsPresenter = null;
-
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
-
     this._showFilmDetails = this._showFilmDetails.bind(this);
     this._hideFilmDetails = this._hideFilmDetails.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
@@ -49,10 +42,8 @@ export default class FilmsPresenter {
 
   init() {
     this._currentSortType = SortType.DEFAULT;
-
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
-
     this._renderMainScreen();
   }
 

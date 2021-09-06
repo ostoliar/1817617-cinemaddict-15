@@ -2,7 +2,6 @@ import { UserAction, UpdateType, CommentsTitle } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { isEsc, isEnter } from '../utils/common.js';
 import { render, rerender, remove } from '../utils/render.js';
-
 import FilmDetailsView from '../view/film-details.js';
 import FilmDetailsBottomView from '../view/film-details-bottom.js';
 import CommentsContainerView from '../view/comments-container.js';
@@ -18,42 +17,33 @@ export default class FilmDetailsPresenter {
     this._changeFilm = changeFilm;
     this._hideFilmDetails = hideFilmDetails;
     this._api = api;
-
     this._film = null;
     this._filmComments = [];
     this._isLoading = true;
     this._isError = false;
     this._prevScrollTop = 0;
-
     this._filmDetailsView = null;
     this._filmDetailsBottomView = null;
     this._commentsContainerView = null;
     this._commentsTitleView = null;
     this._commentsListView = null;
     this._newCommentView = null;
-
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleDocumentKeydown = this._handleDocumentKeydown.bind(this);
-
     this._handleAddToWatchButtonClick = this._handleAddToWatchButtonClick.bind(this);
     this._handleAddWatchedButtonClick = this._handleAddWatchedButtonClick.bind(this);
     this._handleAddFavoriteButtonClick = this._handleAddFavoriteButtonClick.bind(this);
-
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleDeleteButtonClick = this._handleDeleteButtonClick.bind(this);
-
     this._handleModelEvent = this._handleModelEvent.bind(this);
-
     this._filmsModel.addObserver(this._handleModelEvent);
   }
 
   init(film, { loadComments = true } = {}) {
     this._film = film;
     this._isLoading = loadComments;
-
     this._commentsTitleView = null;
     this._commentsListView = null;
-
     this._renderFilmDetails();
   }
 
@@ -68,7 +58,7 @@ export default class FilmDetailsPresenter {
       return this._film.id;
     }
 
-    throw new Error('Film Presenter has not been initialized');
+    throw new Error('Presenter not initialized');
   }
 
   _handleCloseButtonClick() {
@@ -166,15 +156,11 @@ export default class FilmDetailsPresenter {
 
   _renderFilmInfo() {
     const prevFilmDetailsView = this._filmDetailsView;
-
     this._filmDetailsView = new FilmDetailsView(this._film);
-
     this._filmDetailsView.setCloseButtonClickHandler(this._handleCloseButtonClick);
-
     this._filmDetailsView.setAddToWatchButtonClickHandler(this._handleAddToWatchButtonClick);
     this._filmDetailsView.setAddWatchedButtonClickHandler(this._handleAddWatchedButtonClick);
     this._filmDetailsView.setAddFavoriteButtonClickHandler(this._handleAddFavoriteButtonClick);
-
     rerender(this._filmDetailsView, prevFilmDetailsView, this._filmDetailsContainer);
 
     if (!prevFilmDetailsView) {
@@ -184,11 +170,9 @@ export default class FilmDetailsPresenter {
 
   _renderFilmsBottom() {
     this._filmDetailsBottomView = new FilmDetailsBottomView();
-
     this._renderCommentsContainer();
     this._renderComments();
     this._renderNewComment();
-
     render(this._filmDetailsView, this._filmDetailsBottomView);
   }
 
@@ -219,7 +203,6 @@ export default class FilmDetailsPresenter {
 
     this._commentsTitleView =  new CommentsTitleView(this._getCommentsTitle());
     this._commentsListView = new CommentsListView();
-
     rerender(this._commentsTitleView, prevCommentsTitleView, this._commentsContainerView);
     rerender(this._commentsListView, prevCommentsListView, this._commentsContainerView);
 
@@ -241,7 +224,6 @@ export default class FilmDetailsPresenter {
 
   async _renderFilmDetails() {
     this._prevScrollTop = this._filmDetailsView ? this._filmDetailsView.scrollTop : 0;
-
     this._renderFilmInfo();
     this._renderFilmsBottom();
 

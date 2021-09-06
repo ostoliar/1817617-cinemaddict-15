@@ -1,7 +1,6 @@
 import { FilterType, UpdateType, Screen, NavigationItem } from '../const.js';
 import { rerender } from '../utils/render.js';
 import { filter } from '../utils/card.js';
-
 import NavigationView from '../view/navigation.js';
 
 export default class NavigationPresenter {
@@ -10,15 +9,11 @@ export default class NavigationPresenter {
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
     this._renderScreen = renderScreen;
-
     this._activeItem = FilterType.ALL;
-
     this._navigationView = null;
-
     this._handleFilterChange = this._handleFilterChange.bind(this);
     this._handleStatisticClick = this._handleStatisticClick.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
-
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
   }
@@ -27,7 +22,6 @@ export default class NavigationPresenter {
     const prevNavigationView = this._navigationView;
 
     this._navigationView = new NavigationView(this._getFilters(), this._activeItem);
-
     this._navigationView.setFilterChangeHandler(this._handleFilterChange);
     this._navigationView.setStatisticClickHandler(this._handleStatisticClick);
 

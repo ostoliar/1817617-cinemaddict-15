@@ -1,3 +1,13 @@
+export const bodyElement = document.body;
+
+export const CARD_COUNT_PER_STEP = 5;
+
+export const siteMainElement = document.querySelector('.main');
+
+export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
+
+export const AUTHORIZATION = 'Basic s7fgq77r28d';
+
 export const FILMS_STEP = 5;
 
 export const EXTRA_FILMS_AMOUNT = 2;

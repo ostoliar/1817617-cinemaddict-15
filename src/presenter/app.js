@@ -13,79 +13,50 @@ import NavigationPresenter from './navigation.js';
 import FilmsPresenter from './films.js';
 import StatisticPresenter from './statistic.js';
 import API from '../api.js';
-import { Screen,UpdateType, FilterType, EmptyBoardTitle } from '../const.js';
+import { Screen,UpdateType, FilterType, EmptyBoardTitle, END_POINT, AUTHORIZATION } from '../const.js';
 
-const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
-const AUTHORIZATION = 'Basic s7fgq77r28d';
-
-export default class ApplicationPresenter {
+export default class App {
   constructor(applicationContainer) {
     this._api = new API(END_POINT, AUTHORIZATION);
-
     this._applicationContainer = applicationContainer;
     this._headerView = new HeaderView();
     this._mainView = new MainView();
-
     this._profileView = null;
     this._emptyBoardView = new EmptyBoardView(EmptyBoardTitle.LOADING);
     this._footerStatisticsView = new FooterStatisticsView();
-
     this._rankModel = new RankModel();
     this._filmsModel = new FilmsModel();
     this._filterModel = new FilterModel();
-
     this._renderScreen = this._renderScreen.bind(this);
     this._handleRankModelEvent = this._handleRankModelEvent.bind(this);
     this._handleFilmsModelEvent = this._handleFilmsModelEvent.bind(this);
-
     this._navigationPresenter = new NavigationPresenter(this._mainView, this._filterModel, this._filmsModel, this._renderScreen);
     this._filmsScreenPresenter = null;
     this._statisticsScreenPresenter = null;
-
     this._isBlocked = true;
     this._currentScreen = null;
   }
 
   async init() {
-    // Рендер приложения до загрузки фильмов
-
     this._navigationPresenter.init();
-    render(this._mainView, this._emptyBoardView);  // Рендер заглушки
-
+    render(this._mainView, this._emptyBoardView);
     render(this._applicationContainer, this._headerView);
     render(this._applicationContainer, this._mainView);
     render(this._applicationContainer, this._footerStatisticsView);
 
-
     try {
-      // Получение фильмов
       const films = await this._api.getFilms();
-
       if (!films.length) {
-        // Ошибка при отсутствии загруженных фильмов
         throw new Error(EmptyBoardTitle.ERROR);
       }
-
-
-      // Подписка на обновление профиля пользователя
       this._filmsModel.addObserver(this._handleFilmsModelEvent);
       this._rankModel.addObserver(this._handleRankModelEvent);
-
-      // Обновление модели фильмов
       this._filmsModel.setFilms(UpdateType.MINOR, films);
-
-
-      // Удаляет заглушку
       remove(this._emptyBoardView);
       this._emptyBoardView = null;
-
-
-      // Создание презентеров экранов "Фильмы" и "Статистики"
       this._filmsScreenPresenter = new FilmsPresenter(this._mainView, this._filmsModel, this._filterModel, this._api);
       this._statisticsScreenPresenter = new StatisticPresenter(this._mainView, this._rankModel, this._filmsModel);
 
-
-      // Рендер приложения
       this._isBlocked = false;
 
       this._navigationPresenter.setActiveItem(FilterType.ALL);

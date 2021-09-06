@@ -21,7 +21,7 @@ export const getCommentDate = (date) => dayjs(date).fromNow();
 
 export const getCurrentDate = () => dayjs().toDate();
 
-export const isDateInPeriod = (date, period) => {
+export const dateInPeriod = (date, period) => {
   const limitDate = dayjs().subtract(1, period);
   return dayjs(date).isAfter(limitDate);
 };

@@ -1,5 +1,5 @@
-import ApplicationPresenter from './presenter/app.js';
+import AppPresenter from './presenter/app.js';
 
-const applicationPresenter = new ApplicationPresenter(document.body);
+const applicationPresenter = new AppPresenter(document.body);
 
 applicationPresenter.init();
