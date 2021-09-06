@@ -1,8 +1,19 @@
 import AbstractView from './abstract.js';
 
-const createTaskListTemplate = () => '<div class="films-list__container"></div>';
-export default class CardList extends AbstractView {
+const createFilmsListTemplate = ({ title, isExtra, isTitleVisiallyHidden }) => `
+    <section class="films-list ${isExtra ? 'films-list--extra' : ''}">
+      <h2 class="films-list__title ${isTitleVisiallyHidden ? 'visually-hidden' : ''}">${title}</h2>
+    </section>
+  `;
+
+export default class FilmsList extends AbstractView {
+  constructor(options) {
+    super();
+
+    this._options = options;
+  }
+
   getTemplate() {
-    return createTaskListTemplate();
+    return createFilmsListTemplate(this._options);
   }
 }

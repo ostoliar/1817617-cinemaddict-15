@@ -1,3 +1,5 @@
+import FilmsModel from './model/films.js';
+
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
@@ -14,22 +16,37 @@ export default class Api {
     this._authorization = authorization;
   }
 
-  getFilms() {
-    return this._load({url: 'movies'})
-      .then(Api.toJSON);
+  async getFilms() {
+    const response = await this._load({url: 'movies'});
+    const films = await Api.toJSON(response);
+    return films.map(FilmsModel.adaptFilmToClient);
   }
 
-  updateFilm(movies) {
-    return this._load({
-      url: `movies/${movies.id}`,
+  async updateFilm(film) {
+    const response = await this._load({
+      url: `movies/${film.id}`,
       method: Method.PUT,
-      body: JSON.stringify(movies),
+      body: JSON.stringify(FilmsModel.adaptFilmToServer(film)),
       headers: new Headers({'Content-Type': 'application/json'}),
-    })
-      .then(Api.toJSON);
+    });
+    const updatedFilm = await Api.toJSON(response);
+
+    return FilmsModel.adaptFilmToClient(updatedFilm);
   }
 
-  _load({
+  async getComments(film) {
+    const response = await this._load({
+      url: `comments/${film.id}`,
+      method: Method.GET,
+      headers: new Headers({'Content-Type': 'application/json'}),
+    });
+
+    const comments = await Api.toJSON(response);
+
+    return comments.map(FilmsModel.adaptCommentToClient);
+  }
+
+  async _load({
     url,
     method = Method.GET,
     body = null,
@@ -37,12 +54,12 @@ export default class Api {
   }) {
     headers.append('Authorization', this._authorization);
 
-    return fetch(
+    const response = await fetch(
       `${this._endPoint}/${url}`,
       {method, body, headers},
-    )
-      .then(Api.checkStatus)
-      .catch(Api.catchError);
+    );
+
+    return Api.checkStatus(response);
   }
 
   static checkStatus(response) {

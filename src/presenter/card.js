@@ -1,19 +1,93 @@
+import { UserAction, UpdateType } from '../const.js';
+import { rerender } from '../utils/render.js';
+import { getCurrentDate } from '../utils/date.js';
 import FilmCardView from '../view/film-card.js';
-import {render, RenderPosition} from '../utils/render.js';
 
+export default class FilmCardPresenter {
+  constructor(filmCardContainer, changeFilm, showFilmDetails, api) {
+    this._filmCardContainer = filmCardContainer;
+    this._changeFilm = changeFilm;
+    this._showFilmDetails = showFilmDetails;
+    this._api = api;
 
-export default class Card {
-  constructor(cardListContainer) {
-    this._cardListContainer = cardListContainer;
+    this._filmCardView = null;
 
-    this._cardComponent = null;
+    this._handleTitleClick = this._handleTitleClick.bind(this);
+    this._handlePosterClick = this._handlePosterClick.bind(this);
+    this._handleCommentsClick = this._handleCommentsClick.bind(this);
+
+    this._handleAddToWatchButtonClick = this._handleAddToWatchButtonClick.bind(this);
+    this._handleAddWatchedButtonClick = this._handleAddWatchedButtonClick.bind(this);
+    this._handleAddFavoriteButtonClick = this._handleAddFavoriteButtonClick.bind(this);
   }
 
-  init(card) {
-    this._card = card;
+  init(film) {
+    this._film = film;
 
-    this._cardComponent = new FilmCardView(card);
+    const prevFilmCard = this._filmCardView;
 
-    render(this._cardListContainer, this._cardComponent, RenderPosition.BEFOREEND);
+    this._filmCardView = new FilmCardView(this._film);
+
+    this._filmCardView.setTitleClickHandler(this._handleTitleClick);
+    this._filmCardView.setPosterClickHandler(this._handlePosterClick);
+    this._filmCardView.setCommentsClickHandler(this._handleCommentsClick);
+
+    this._filmCardView.setAddToWatchButtonClickHandler(this._handleAddToWatchButtonClick);
+    this._filmCardView.setAddWatchedButtonClickHandler(this._handleAddWatchedButtonClick);
+    this._filmCardView.setAddFavoriteButtonClickHandler(this._handleAddFavoriteButtonClick);
+
+    rerender(this._filmCardView, prevFilmCard, this._filmCardContainer);
+  }
+
+  _handleTitleClick() {
+    this._showFilmDetails(this._film);
+  }
+
+  _handlePosterClick() {
+    this._showFilmDetails(this._film);
+  }
+
+  _handleCommentsClick() {
+    this._showFilmDetails(this._film);
+  }
+
+  async _handleAddToWatchButtonClick() {
+    let updatedFilm = {
+      ...this._film,
+      userDetails: {
+        ...this._film.userDetails,
+        isToWatch: !this._film.userDetails.isToWatch,
+      },
+    };
+
+    updatedFilm = await this._api.updateFilm(updatedFilm);
+    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+  }
+
+  async _handleAddWatchedButtonClick() {
+    let updatedFilm ={
+      ...this._film,
+      userDetails: {
+        ...this._film.userDetails,
+        isWatched: !this._film.userDetails.isWatched,
+        watchingDate: !this._film.userDetails.isWatched ? getCurrentDate() : '',
+      },
+    };
+
+    updatedFilm = await this._api.updateFilm(updatedFilm);
+    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+  }
+
+  async _handleAddFavoriteButtonClick() {
+    let updatedFilm ={
+      ...this._film,
+      userDetails: {
+        ...this._film.userDetails,
+        isFavorite: !this._film.userDetails.isFavorite,
+      },
+    };
+
+    updatedFilm = await this._api.updateFilm(updatedFilm);
+    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 }
