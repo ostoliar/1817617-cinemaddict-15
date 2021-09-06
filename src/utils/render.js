@@ -1,11 +1,11 @@
 import Abstract from '../view/abstract.js';
 
-const Place = {
+const RenderPlace = {
   BEFORE_END: 'beforeend',
   AFTER_BEGIN: 'afterbegin',
 };
 
-export const render = (container, element, place = Place.BEFORE_END) => {
+export const render = (container, element, place = RenderPlace.BEFORE_END) => {
   if (container instanceof Abstract) {
     container = container.getElement();
   }
@@ -15,10 +15,10 @@ export const render = (container, element, place = Place.BEFORE_END) => {
   }
 
   switch (place) {
-    case Place.BEFORE_END:
+    case RenderPlace.BEFORE_END:
       container.append(element);
       break;
-    case Place.AFTER_BEGIN:
+    case RenderPlace.AFTER_BEGIN:
       container.prepend(element);
       break;
   }
@@ -42,7 +42,7 @@ export const replace = (newChild, oldChild) => {
   parent.replaceChild(newChild, oldChild);
 };
 
-export const rerender = (newElement, oldElement, container, place = Place.BEFORE_END) => {
+export const rerender = (newElement, oldElement, container, place = RenderPlace.BEFORE_END) => {
   if (oldElement) {
     replace(newElement, oldElement);
   } else {

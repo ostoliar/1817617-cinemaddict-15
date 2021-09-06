@@ -14,7 +14,7 @@ import FilmDetailsPresenter from './popup.js';
 
 const bodyElement = document.body;
 
-export default class FilmsScreenPresenter {
+export default class FilmsPresenter {
   constructor(mainScreenContainer, filmsModel, filterModel, api) {
     this._mainScreenContainer = mainScreenContainer;
     this._filmsModel = filmsModel;
@@ -119,7 +119,7 @@ export default class FilmsScreenPresenter {
 
   _handleViewAction(actionType, updateType, payload) {
     switch (actionType) {
-      case UserAction.UPDATE_FILM_USER_DETAILS:
+      case UserAction.UPDATE_FILM_DETAILS:
         this._filmsModel.updateFilm(updateType, payload);
         break;
       case UserAction.DELETE_COMMENT:

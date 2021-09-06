@@ -98,7 +98,7 @@ export default class FilmDetailsPresenter {
 
     updatedFilm = await this._api.updateFilm(updatedFilm);
 
-    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UserAction.UPDATE_FILM_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
   async _handleAddWatchedButtonClick() {
@@ -113,7 +113,7 @@ export default class FilmDetailsPresenter {
 
     updatedFilm = await this._api.updateFilm(updatedFilm);
 
-    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UserAction.UPDATE_FILM_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
   async _handleAddFavoriteButtonClick() {
@@ -127,7 +127,7 @@ export default class FilmDetailsPresenter {
 
     updatedFilm = await this._api.updateFilm(updatedFilm);
 
-    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UserAction.UPDATE_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
   _handleDeleteButtonClick(id) {

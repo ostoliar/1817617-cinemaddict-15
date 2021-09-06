@@ -13,7 +13,7 @@ export default class RankModel extends AbstractObserver {
     this._notify(updateType, rank);
   }
 
-  getRank() {
+  getRanking() {
     return this._currentRank;
   }
 }

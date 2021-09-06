@@ -5,7 +5,7 @@ import { getWatchedStatisticsData } from '../utils/statistic.js';
 
 import StatisticsView from '../view/statistic.js';
 
-export default class StatisticsScreen {
+export default class Statistic {
   constructor(statisticContainer, rankModel, filmsModel) {
     this._statisticContainer = statisticContainer;
 
@@ -23,7 +23,7 @@ export default class StatisticsScreen {
     this._statiscticsView = new StatisticsView();
     this._statiscticsView.setPeriodChangeHandler(this._handlePeriodChange);
     this._statiscticsView.updateData({
-      rank: this._rankModel.getRank(),
+      rank: this._rankModel.getRanking(),
     });
     this._handlePeriodChange(StatisticPeriodValue.ALL);
 

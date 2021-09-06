@@ -1,40 +1,22 @@
 import { render, replace, remove } from '../utils/render.js';
 import { filter } from '../utils/card.js';
-import { getRank } from '../utils/statistic.js';
+import { getRanking } from '../utils/statistic.js';
 import EmptyBoardView from '../view/empty-board.js';
 import ProfileView from '../view/profile.js';
 import MainView from '../view/main.js';
 import HeaderView from '../view/header.js';
 import FooterStatisticsView from '../view/footer-statistics.js';
-import RankModel from '../model/rank.js';
+import RankModel from '../model/ranking.js';
 import FilmsModel from '../model/films.js';
 import FilterModel from '../model/filter.js';
 import NavigationPresenter from './navigation.js';
-import FilmsScreenPresenter from './films-screen.js';
-import StatisticsScreenPresenter from './statistic.js';
+import FilmsPresenter from './films.js';
+import StatisticPresenter from './statistic.js';
 import API from '../api.js';
+import { Screen,UpdateType, FilterType, EmptyBoardTitle } from '../const.js';
 
 const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
 const AUTHORIZATION = 'Basic s7fgq77r28d';
-const Screen = {
-  FILMS: 'films',
-  STATISTICS: 'statistics',
-};
-const UpdateType = {
-  PATCH: 'patch',
-  MINOR: 'minor',
-  MAJOR: 'major',
-};
-const FilterType = {
-  ALL: 'ALL',
-  WATCHLIST: 'WATCHLIST',
-  HISTORY: 'HISTORY',
-  FAVORITES: 'FAVORITES',
-};
-const EmptyBoardTitle = {
-  ERROR: 'There are no movies in our database',
-  LOADING: 'Loading...',
-};
 
 export default class ApplicationPresenter {
   constructor(applicationContainer) {
@@ -99,8 +81,8 @@ export default class ApplicationPresenter {
 
 
       // Создание презентеров экранов "Фильмы" и "Статистики"
-      this._filmsScreenPresenter = new FilmsScreenPresenter(this._mainView, this._filmsModel, this._filterModel, this._api);
-      this._statisticsScreenPresenter = new StatisticsScreenPresenter(this._mainView, this._rankModel, this._filmsModel);
+      this._filmsScreenPresenter = new FilmsPresenter(this._mainView, this._filmsModel, this._filterModel, this._api);
+      this._statisticsScreenPresenter = new StatisticPresenter(this._mainView, this._rankModel, this._filmsModel);
 
 
       // Рендер приложения
@@ -145,7 +127,7 @@ export default class ApplicationPresenter {
   }
 
   _renderProfile() {
-    this._profileView = new ProfileView(this._rankModel.getRank());
+    this._profileView = new ProfileView(this._rankModel.getRanking());
   }
 
   _handleRankModelEvent() {
@@ -156,9 +138,9 @@ export default class ApplicationPresenter {
     if (updateType !== UpdateType.PATCH) {
       const films = this._filmsModel.getAll();
       const watchedFilmsAmount = filter[FilterType.HISTORY](films).length;
-      const rank = getRank(watchedFilmsAmount);
+      const rank = getRanking(watchedFilmsAmount);
 
-      if (rank !== this._rankModel.getRank()) {
+      if (rank !== this._rankModel.getRanking()) {
         this._rankModel.setRank(UpdateType.MAJOR, rank);
       }
     }

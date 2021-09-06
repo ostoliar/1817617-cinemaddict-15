@@ -1,7 +1,7 @@
 import { getTotalRuntime } from './date.js';
 import { Rank, rankToUpperLimit } from '../const.js';
 
-export const getRank = (watchedFilmsAmount) => {
+export const getRanking = (watchedFilmsAmount) => {
   for (const [name, rank] of Object.entries(Rank)) {
     if (watchedFilmsAmount <= rankToUpperLimit[name]) {
       return rank;
