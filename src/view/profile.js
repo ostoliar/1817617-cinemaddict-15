@@ -1,15 +1,20 @@
 import AbstractView from './abstract.js';
 
-
-const createProfileTemplate = () => (
-  `<section class="header__profile profile">
-    <p class="profile__rating">Movie Buff</p>
+const createProfileTemplate = (rank) => `
+  <section class="header__profile profile">
+    ${rank ? `<p class="profile__rating">${rank}</p>` : ''}
     <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-  </section>`
-);
+  </section>
+`;
 
-export default class ProfileDetails extends AbstractView {
+export default class Profile extends AbstractView {
+  constructor(rank) {
+    super();
+
+    this._rank = rank;
+  }
+
   getTemplate() {
-    return createProfileTemplate();
+    return createProfileTemplate(this._rank);
   }
 }
