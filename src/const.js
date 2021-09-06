@@ -32,7 +32,6 @@ export const Emotion = {
   ANGRY: 'angry',
 };
 
-
 export const FilmsListOption = {
   MAIN: {
     title: 'All movies. Upcoming',
@@ -84,11 +83,6 @@ export const CommentsTitle = {
   LOADING: 'loading...',
 };
 
-export const UserAction = {
-  CREATE_COMMENT: 'create-comment',
-  DELETE_COMMENT: 'delete-comment',
-  UPDATE_FILM_DETAILS: 'update-film-user-details',
-};
 
 export const UpdateType = {
   PATCH: 'patch',
@@ -216,4 +210,5 @@ export const ClassName = {
   STATISTICS_FILTER_FORM: 'statistic__filters',
   STATISTICS_FILTER_INPUT: 'statistic__filters-input',
   STATISTICS_CHART: 'statistic__chart',
+  SHAKE: 'shake',
 };

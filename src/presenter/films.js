@@ -1,7 +1,6 @@
 import { render, remove, replace, rerender } from '../utils/render.js';
 import { sortByRating, sortByDate, filter } from '../utils/card.js';
-import { FilmsListOption, SortType, ClassName, UpdateType,
-  UserAction, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT, bodyElement
+import { FilmsListOption, SortType, ClassName, UpdateType, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT, bodyElement
 } from '../const.js';
 import SortView from '../view/filter.js';
 import BoardView from '../view/board.js';
@@ -41,6 +40,7 @@ export default class FilmsPresenter {
   }
 
   init() {
+    this._mainFilmsCount = FILMS_STEP;
     this._currentSortType = SortType.DEFAULT;
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -108,19 +108,8 @@ export default class FilmsPresenter {
     this._renderMainFilmsList({ update: true });
   }
 
-  _handleViewAction(actionType, updateType, payload) {
-    switch (actionType) {
-      case UserAction.UPDATE_FILM_DETAILS:
-        this._filmsModel.updateFilm(updateType, payload);
-        break;
-      case UserAction.DELETE_COMMENT:
-        this._filmsModel.deleteComment(updateType, payload);
-        break;
-      case UserAction.CREATE_COMMENT:
-        this._filmsModel.createComment(updateType, payload);
-        break;
-    }
-
+  _handleViewAction(updateType, payload) {
+    this._filmsModel.updateFilm(updateType, payload);
   }
 
   _handleModelEvent(updateType, updatedFilm) {
