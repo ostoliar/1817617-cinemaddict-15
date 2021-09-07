@@ -19,6 +19,17 @@ export const KeyCode = {
   ESCAPE: 'Escape',
 };
 
+export const Data = {
+  FILM_INFO: 'film_info',
+  ALTERNATIVE_TITLE: 'alternative_title',
+  AGE_RATING: 'age_rating',
+  RELEASE_COUNTRY: 'release_country',
+  TOTAL_RATING: 'total_rating',
+  USER_DETAILS: 'user_details',
+  ALREADY_WATCHED: 'already_watched',
+  WATCHING_DATE: 'watching_date',
+};
+
 export const SortType = {
   DEFAULT: 'default',
   DATE: 'date',
@@ -31,7 +42,6 @@ export const Emotion = {
   PUKE: 'puke',
   ANGRY: 'angry',
 };
-
 
 export const FilmsListOption = {
   MAIN: {
@@ -84,11 +94,6 @@ export const CommentsTitle = {
   LOADING: 'loading...',
 };
 
-export const UserAction = {
-  CREATE_COMMENT: 'create-comment',
-  DELETE_COMMENT: 'delete-comment',
-  UPDATE_FILM_DETAILS: 'update-film-user-details',
-};
 
 export const UpdateType = {
   PATCH: 'patch',
@@ -216,4 +221,5 @@ export const ClassName = {
   STATISTICS_FILTER_FORM: 'statistic__filters',
   STATISTICS_FILTER_INPUT: 'statistic__filters-input',
   STATISTICS_CHART: 'statistic__chart',
+  SHAKE: 'shake',
 };

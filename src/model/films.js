@@ -1,6 +1,7 @@
 import { updateItem } from '../utils/common.js';
 import { sortByRating, sortByComments, hasComments, hasRating } from '../utils/card.js';
 import AbstractObserver from '../utils/abstract-observer.js';
+import { Data } from '../const.js';
 
 export default class FilmsModel extends AbstractObserver {
   constructor(films = []) {
@@ -36,44 +37,36 @@ export default class FilmsModel extends AbstractObserver {
     this._notify(updateType, updatedFilm);
   }
 
-  createComment() {
-
-  }
-
-  deleteComment() {
-
-  }
-
   static adaptFilmToClient(film) {
     const clientFilm = { ... film};
 
     clientFilm.filmInfo = {
-      ...film['film_info'],
-      originalTitle: film['film_info']['alternative_title'],
-      genres: [ ...film['film_info'].genre ],
-      ageRating: film['film_info']['age_rating'],
-      releaseDate: new Date(film['film_info'].release.date),
-      country: film['film_info'].release['release_country'],
-      rating: film['film_info']['total_rating'],
-      poster: film['film_info'].poster.split('images/posters/')[1],
+      ...film[Data.FILM_INFO],
+      originalTitle: film[Data.FILM_INFO][Data.ALTERNATIVE_TITLE],
+      genres: [ ...film[Data.FILM_INFO].genre ],
+      ageRating: film[Data.FILM_INFO][Data.AGE_RATING],
+      releaseDate: new Date(film[Data.FILM_INFO].release.date),
+      country: film[Data.FILM_INFO].release[Data.RELEASE_COUNTRY],
+      rating: film[Data.FILM_INFO][Data.TOTAL_RATING],
+      poster: film[Data.FILM_INFO].poster.split('images/posters/')[1],
     };
 
     clientFilm.userDetails = {
-      isToWatch: film['user_details'].watchlist,
-      isFavorite: film['user_details'].favorite,
-      isWatched: film['user_details']['already_watched'],
-      watchingDate: film['user_details']['watching_date'] ? new Date(film['user_details']['watching_date']) : null,
+      isToWatch: film[Data.USER_DETAILS].watchlist,
+      isFavorite: film[Data.USER_DETAILS].favorite,
+      isWatched: film[Data.USER_DETAILS][Data.ALREADY_WATCHED],
+      watchingDate: film[Data.USER_DETAILS][Data.WATCHING_DATE] ? new Date(film[Data.USER_DETAILS][Data.WATCHING_DATE]) : null,
     };
 
-    delete clientFilm['film_info'];
+    delete clientFilm[Data.FILM_INFO];
 
-    delete clientFilm.filmInfo['alternative_title'];
-    delete clientFilm.filmInfo['age_rating'];
-    delete clientFilm.filmInfo['total_rating'];
+    delete clientFilm.filmInfo[Data.ALTERNATIVE_TITLE];
+    delete clientFilm.filmInfo[Data.AGE_RATING];
+    delete clientFilm.filmInfo[Data.TOTAL_RATING];
     delete clientFilm.filmInfo.release;
     delete clientFilm.filmInfo.genre;
 
-    delete clientFilm['user_details'];
+    delete clientFilm[Data.USER_DETAILS];
 
     return clientFilm;
   }
@@ -81,35 +74,35 @@ export default class FilmsModel extends AbstractObserver {
   static adaptFilmToServer(film) {
     const serverFilm = { ... film};
 
-    serverFilm['film_info'] = {
+    serverFilm[Data.FILM_INFO] = {
       ...film.filmInfo,
-      ['alternative_title']: film.filmInfo.originalTitle,
+      [Data.ALTERNATIVE_TITLE]: film.filmInfo.originalTitle,
       genre: [ ...film.filmInfo.genres],
-      ['age_rating']: film.filmInfo.ageRating,
-      ['total_rating']: film.filmInfo.rating,
+      [Data.AGE_RATING]: film.filmInfo.ageRating,
+      [Data.TOTAL_RATING]: film.filmInfo.rating,
       poster: `'images/posters/'${film.filmInfo.poster}`,
     };
 
-    serverFilm['film_info'].release = {
+    serverFilm[Data.FILM_INFO].release = {
       date: film.filmInfo.releaseDate ? film.filmInfo.releaseDate.toISOString() : null,
-      ['release_country']: film.filmInfo.country,
+      [Data.RELEASE_COUNTRY]: film.filmInfo.country,
     };
 
-    serverFilm['user_details'] = {
+    serverFilm[Data.USER_DETAILS] = {
       watchlist: film.userDetails.isToWatch,
       favorite: film.userDetails.isFavorite,
-      ['already_watched']: film.userDetails.isWatched,
-      ['watching_date']: film.userDetails.watchingDate ? film.userDetails.watchingDate.toISOString(): null,
+      [Data.ALREADY_WATCHED]: film.userDetails.isWatched,
+      [Data.WATCHING_DATE]: film.userDetails.watchingDate ? film.userDetails.watchingDate.toISOString(): null,
     };
 
     delete serverFilm.filmInfo;
 
-    delete serverFilm['film_info'].originalTitle;
-    delete serverFilm['film_info'].genres;
-    delete serverFilm['film_info'].country;
-    delete serverFilm['film_info'].releaseDate;
-    delete serverFilm['film_info'].ageRating;
-    delete serverFilm['film_info'].rating;
+    delete serverFilm[Data.FILM_INFO].originalTitle;
+    delete serverFilm[Data.FILM_INFO].genres;
+    delete serverFilm[Data.FILM_INFO].country;
+    delete serverFilm[Data.FILM_INFO].releaseDate;
+    delete serverFilm[Data.FILM_INFO].ageRating;
+    delete serverFilm[Data.FILM_INFO].rating;
 
     delete serverFilm.userDetails;
 
