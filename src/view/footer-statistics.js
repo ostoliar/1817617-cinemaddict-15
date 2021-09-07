@@ -2,6 +2,7 @@ import AbstractView from './abstract.js';
 
 export const createFooterStatisticsTemplate = (totalFilmsAmount) => `
   <section class="footer__statistics">
+    <p> Copyright © 2021 CINEMADDICT Inc. All rights reserved.</p>
     <p>${totalFilmsAmount} movies inside</p>
   </section>
 `;

@@ -1220,3 +1220,7 @@ button {
   }
 }
 
+.footer__statistics {
+  display: flex;
+  justify-content: space-between;
+}
