@@ -80,8 +80,8 @@ export const NavigationItem = {
 
 export const FilteredEmptyListTitle = {
   WATCHLIST: 'There ara no movies to watch now',
-  HISTORY: 'There ara no movies to watch now',
-  FAVORITES: 'There ara no movies to watch now',
+  HISTORY: 'There are no watched movies now',
+  FAVORITES: 'There are no favorite movies now',
 };
 
 export const EmptyBoardTitle = {

@@ -17,7 +17,7 @@ export const getTotalRuntime = (totalMinutesAmount) => {
   return { hour: hoursAmount, minute: minutesAmount };
 };
 
-export const getCommentDate = (date) => dayjs(date).fromNow();
+export const getCommentDate = (date) => dayjs(date).format('YYYY MMMM DD HH:mm');
 
 export const getCurrentDate = () => dayjs().toDate();
 
