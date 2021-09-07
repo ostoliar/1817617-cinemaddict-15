@@ -1191,7 +1191,6 @@ button {
   min-height: 300px;
   padding-top: 50px;
   padding-bottom: 50px;
-}
 
 .shake {
   animation: shake 0.8s forwards;
@@ -1219,4 +1218,3 @@ button {
     transform: translateX(10px);
   }
 }
-
