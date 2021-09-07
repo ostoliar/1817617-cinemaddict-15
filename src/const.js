@@ -19,6 +19,17 @@ export const KeyCode = {
   ESCAPE: 'Escape',
 };
 
+export const Data = {
+  FILM_INFO: 'film_info',
+  ALTERNATIVE_TITLE: 'alternative_title',
+  AGE_RATING: 'age_rating',
+  RELEASE_COUNTRY: 'release_country',
+  TOTAL_RATING: 'total_rating',
+  USER_DETAILS: 'user_details',
+  ALREADY_WATCHED: 'already_watched',
+  WATCHING_DATE: 'watching_date',
+};
+
 export const SortType = {
   DEFAULT: 'default',
   DATE: 'date',
