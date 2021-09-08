@@ -19,6 +19,12 @@ export const KeyCode = {
   ESCAPE: 'Escape',
 };
 
+export const UserAction = {
+  UPDATE_USER_DETAILS: 'update-user-details',
+  CREATE_COMMENT: 'create-comment',
+  DELETE_COMMENT: 'delete-comment',
+};
+
 export const Data = {
   FILM_INFO: 'film_info',
   ALTERNATIVE_TITLE: 'alternative_title',
@@ -62,6 +68,8 @@ export const FilmsListOption = {
 };
 
 export const NEW_COMMENT_DEFAULT = {
+  isError: false,
+  isDisabled: false,
   text: '',
   emotion: '',
 };
@@ -99,6 +107,7 @@ export const UpdateType = {
   PATCH: 'patch',
   MINOR: 'minor',
   MAJOR: 'major',
+  INIT: 'init',
 };
 
 export const Screen = {

@@ -1,4 +1,5 @@
 import FilmsModel from './model/films.js';
+import CommentModel from './model/comment.js';
 
 const Method = {
   GET: 'GET',
@@ -36,16 +37,16 @@ export default class Api {
     return FilmsModel.adaptFilmToClient(updatedFilm);
   }
 
-  async getComments(film) {
+  async getComments(filmId) {
     const response = await this._load({
-      url: `comments/${film.id}`,
+      url: `comments/${filmId}`,
       method: Method.GET,
       headers: new Headers({'Content-Type': 'application/json'}),
     });
 
     const comments = await Api.toJSON(response);
 
-    return comments.map(FilmsModel.adaptCommentToClient);
+    return comments.map(CommentModel.adaptCommentToClient);
   }
 
   async addComment(filmId, newComment) {
@@ -58,7 +59,7 @@ export default class Api {
     const { movie, comments } = await Api.toJSON(response);
     const adaptedResponse = {
       updatedFilm: FilmsModel.adaptFilmToClient(movie),
-      updatedComments: comments.map(FilmsModel.adaptCommentToClient),
+      updatedComments: comments.map(CommentModel.adaptCommentToClient),
     };
     return adaptedResponse;
   }
@@ -68,6 +69,16 @@ export default class Api {
       url: `comments/${id}`,
       method: Method.DELETE,
     });
+  }
+
+  async sync(films) {
+    const response = await this._load({
+      url: '/movies/sync',
+      method: Method.POST,
+      body: JSON.stringify(films),
+    });
+
+    return await Api.toJSON(response);
   }
 
   async _load({

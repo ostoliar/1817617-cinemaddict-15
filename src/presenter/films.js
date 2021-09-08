@@ -1,6 +1,6 @@
 import { render, remove, replace, rerender } from '../utils/render.js';
 import { sortByRating, sortByDate, filter } from '../utils/card.js';
-import { FilmsListOption, SortType, ClassName, UpdateType, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT, bodyElement
+import { FilmsListOption, SortType, ClassName, UpdateType, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT, bodyElement, UserAction
 } from '../const.js';
 import SortView from '../view/filter.js';
 import BoardView from '../view/board.js';
@@ -108,8 +108,12 @@ export default class FilmsPresenter {
     this._renderMainFilmsList({ update: true });
   }
 
-  _handleViewAction(updateType, payload) {
-    this._filmsModel.updateFilm(updateType, payload);
+  async _handleViewAction(userAction, updateType, updatedFilm) {
+    if (userAction === UserAction.UPDATE_USER_DETAILS) {
+      updatedFilm = await this._api.updateFilm(updatedFilm);
+    }
+
+    this._filmsModel.updateFilm(updateType, updatedFilm);
   }
 
   _handleModelEvent(updateType, updatedFilm) {

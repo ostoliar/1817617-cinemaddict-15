@@ -12,12 +12,12 @@ import FilterModel from '../model/filter.js';
 import NavigationPresenter from './navigation.js';
 import FilmsPresenter from './films.js';
 import StatisticPresenter from './statistic.js';
-import API from '../api.js';
-import { Screen,UpdateType, FilterType, EmptyBoardTitle, END_POINT, AUTHORIZATION } from '../const.js';
+// import API from '../api.js';
+import { Screen,UpdateType, FilterType, EmptyBoardTitle } from '../const.js';
 
 export default class App {
-  constructor(applicationContainer) {
-    this._api = new API(END_POINT, AUTHORIZATION);
+  constructor(applicationContainer, api) {
+    this._api = api;
     this._applicationContainer = applicationContainer;
     this._headerView = new HeaderView();
     this._mainView = new MainView();
