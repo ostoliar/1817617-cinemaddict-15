@@ -89,7 +89,7 @@ export default class NavigationPresenter {
       return;
     }
 
-    if (updateType === UpdateType.MINOR) {
+    if (updateType === UpdateType.INIT || updateType === UpdateType.MINOR) {
       this._resetFilters();
     }
 

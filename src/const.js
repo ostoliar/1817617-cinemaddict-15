@@ -14,6 +14,8 @@ export const EXTRA_FILMS_AMOUNT = 2;
 
 export const MAX_DESCRIPTION_LENGTH = 140;
 
+export const OFFLINE_POSTFIX =  ' [offline]';
+
 export const KeyCode = {
   ENTER: 'Enter',
   ESCAPE: 'Escape',

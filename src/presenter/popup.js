@@ -36,8 +36,9 @@ export default class FilmDetailsPresenter {
     this._handleAddToWatchButtonClick = this._handleAddToWatchButtonClick.bind(this);
     this._handleAddWatchedButtonClick = this._handleAddWatchedButtonClick.bind(this);
     this._handleAddFavoriteButtonClick = this._handleAddFavoriteButtonClick.bind(this);
-    this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleDeleteButtonClick = this._handleDeleteButtonClick.bind(this);
+    this._handleNewCommentFormSubmit = this._handleNewCommentFormSubmit.bind(this);
+    this._handleCommentsViewAction = this._handleCommentsViewAction.bind(this);
     this._handleFilmsModelEvent = this._handleFilmsModelEvent.bind(this);
     this._handleCommentsModelEvent = this._handleCommentsModelEvent.bind(this);
     this._filmsModel.addObserver(this._handleFilmsModelEvent);
@@ -77,7 +78,7 @@ export default class FilmDetailsPresenter {
 
   _handleDocumentKeydown(evt) {
     if ((isEnter(evt) && evt.ctrlKey)) {
-      this._handleFormSubmit();
+      this._handleNewCommentFormSubmit();
       return;
     }
 
@@ -131,15 +132,7 @@ export default class FilmDetailsPresenter {
     }
     try {
       this._commentView.get(commentId).setDeletingStatus();
-      await this._api.deleteComment(commentId);
-
-      const updatedFilm = {
-        ...this._film,
-        comments: this._film.comments.filter((id) => id !== commentId),
-      };
-      await this._api.updateFilm(updatedFilm, { isServerUpdate: false });
-      this._changeFilm(UserAction.DELETE_COMMENT, UpdateType.PATCH, updatedFilm);
-      this._commentsModel.deleteComment(UpdateType.PATCH, commentId);
+      await this._handleCommentsViewAction(UserAction.DELETE_COMMENT, UpdateType.PATCH, commentId);
 
     } catch (error) {
       this._commentView.get(commentId).resetDeletingStatus();
@@ -148,20 +141,22 @@ export default class FilmDetailsPresenter {
   }
 
 
-  async _handleFormSubmit() {
+  async _handleNewCommentFormSubmit() {
     if (!isOnline()) {
       this._newCommentView.setErrorState();
       alert('You can not delete comment couse you are offline now');
       return;
     }
-    const newComment = this._newCommentView.getData();
     try {
       this._newCommentView.disable();
       this._newCommentView.clearErrorState();
-      const { updatedFilm, updatedComments } = await this._api.addComment(this._film.id, newComment);
-
-      this._changeFilm(UserAction.CREATE_COMMENT, UpdateType.PATCH, updatedFilm);
-      this._commentsModel.setComments(UpdateType.PATCH, updatedComments);
+      await this._handleCommentsViewAction(
+        UserAction.CREATE_COMMENT,
+        UpdateType.PATCH,
+        {
+          filmId: this._film.id,
+          newComment: this._newCommentView.getData(),
+        });
 
       this._newCommentView.reset();
 
@@ -169,6 +164,37 @@ export default class FilmDetailsPresenter {
       this._newCommentView.setErrorState();
     }
     this._newCommentView.enable();
+  }
+
+  async _handleCommentsViewAction(updateAction, updateType, payload) {
+    let response = null;
+    let updatedFilm = null;
+
+    switch (updateAction) {
+      case UserAction.CREATE_COMMENT:
+        response = await this._api.addComment(payload);
+
+        await this._changeFilm(updateAction, updateType, response.updatedFilm);
+
+        this._commentsModel.setComments(updateType, response.updatedComments);
+        break;
+
+      case UserAction.DELETE_COMMENT:
+        await this._api.deleteComment(payload);
+
+        updatedFilm = {
+          ...this._film,
+          comments: this._film.comments.filter((id) => id !== payload),
+        };
+
+        await Promise.all([
+          this._changeFilm(updateAction, updateType, updatedFilm),
+          this._api.updateFilm(updatedFilm, { isServerUpdate: false }),
+        ]);
+
+        this._commentsModel.deleteComment(updateType, payload);
+        break;
+    }
   }
 
   _handleFilmsModelEvent(updateType, updatedFilm) {

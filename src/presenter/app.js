@@ -51,7 +51,7 @@ export default class App {
       }
       this._filmsModel.addObserver(this._handleFilmsModelEvent);
       this._rankModel.addObserver(this._handleRankModelEvent);
-      this._filmsModel.setFilms(UpdateType.MINOR, films);
+      this._filmsModel.setFilms(UpdateType.INIT, films);
       remove(this._emptyBoardView);
       this._emptyBoardView = null;
       this._filmsScreenPresenter = new FilmsPresenter(this._mainView, this._filmsModel, this._filterModel, this._api);
@@ -106,7 +106,7 @@ export default class App {
   }
 
   _handleFilmsModelEvent(updateType) {
-    if (updateType !== UpdateType.PATCH) {
+    if (updateType === UpdateType.INIT || updateType === UpdateType.MINOR) {
       const films = this._filmsModel.getAll();
       const watchedFilmsAmount = filter[FilterType.HISTORY](films).length;
       const rank = getRanking(watchedFilmsAmount);

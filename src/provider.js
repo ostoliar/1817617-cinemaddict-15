@@ -73,10 +73,17 @@ export default class Provider {
     if (isOnline()) {
       const storeFilms = Object.values(this._store.getItems());
       const { updated: updatedFilms } = await this._api.sync(storeFilms);
-      const items = createStoreStructure([ ...updatedFilms ]);
+      const items = Provider.createStoreStructure([ ...updatedFilms ]);
       this._store.setItems(items);
       return;
     }
     return Promise.reject(new Error('Sync data fail'));
+  }
+
+  static createStoreStructure(items) {
+    return items.reduce((store, item) => ({
+      ...store,
+      [item.id]: item,
+    }), {});
   }
 }

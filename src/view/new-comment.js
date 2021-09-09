@@ -16,8 +16,8 @@ export const createNewCommentTemplate = ({ text, emotion: currentEmotion, isDisa
   const emotionInputsTemplate = Object.values(Emotion).map((emotion) => createEmotionInputTemplate(emotion, emotion === currentEmotion, isDisabled)).join('');
   const emojiLabelTemplate = currentEmotion ?
     `<img src="images/emoji/${currentEmotion}.png" width="55" height="55" alt="emoji-smile" />` : '';
-    const textAreaDisabled = isDisabled ? 'disabled' : '';
-    const errorClass = isError ? ClassName.SHAKE : '';
+  const textAreaDisabled = isDisabled ? 'disabled' : '';
+  const errorClass = isError ? ClassName.SHAKE : '';
 
   return `
   <div class="film-details__new-comment ${errorClass}">
@@ -96,7 +96,7 @@ export default class NewCommentView extends SmartView {
     this.updateData({
       text: evt.currentTarget.value,
       isError: false,
-    }, true);
+    }, { isElementUpdate: true });
   }
 
   _setInnerHandlers() {

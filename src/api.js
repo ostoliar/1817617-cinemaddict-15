@@ -64,9 +64,9 @@ export default class Api {
     return adaptedResponse;
   }
 
-  async deleteComment(id) {
+  async deleteComment(commentId) {
     await this._load({
-      url: `comments/${id}`,
+      url: `comments/${commentId}`,
       method: Method.DELETE,
     });
   }

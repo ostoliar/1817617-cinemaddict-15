@@ -224,6 +224,14 @@ export default class FilmsPresenter {
 
     this[`_${type}FilmPresenter`].clear();
 
+    if (!extraFilms.length) {
+      if (prevExtraFilmsListView) {
+        remove(prevExtraFilmsListView);
+      }
+
+      return;
+    }
+
     this[`_${type}FilmsListView`] = new FilmsListView(option);
     this[`_${type}FilmsContainerView`] = new FilmsContainerView();
 
