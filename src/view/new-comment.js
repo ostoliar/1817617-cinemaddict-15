@@ -13,7 +13,13 @@ const createEmotionInputTemplate = (emotion, isChecked, isDisabled) => {
 };
 
 export const createNewCommentTemplate = ({ text, emotion: currentEmotion, isDisabled, isError }) => {
-  const emotionInputsTemplate = Object.values(Emotion).map((emotion) => createEmotionInputTemplate(emotion, emotion === currentEmotion, isDisabled)).join('');
+  const emotionInputsTemplate = Object.values(Emotion)
+    .map((emotion) => createEmotionInputTemplate({
+      emotion,
+      isDisabled,
+      isChecked: emotion === currentEmotion,
+    }))
+    .join('');
   const emojiLabelTemplate = currentEmotion ?
     `<img src="images/emoji/${currentEmotion}.png" width="55" height="55" alt="emoji-smile" />` : '';
   const textAreaDisabled = isDisabled ? 'disabled' : '';
@@ -61,7 +67,10 @@ export default class NewCommentView extends SmartView {
   }
 
   getData() {
-    return this._data;
+    return {
+      text: this._data.text,
+      emotion: this._data.emotion,
+    };
   }
 
   setErrorState() {

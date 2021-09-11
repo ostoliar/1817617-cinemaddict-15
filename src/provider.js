@@ -1,12 +1,6 @@
 import { isOnline } from './utils/common.js';
 import FilmsModel from './model/films.js';
 
-const createStoreStructure = (items) => items.reduce((store, item) => ({
-  ...store,
-  [item.id]: item,
-}), {});
-
-
 export default class Provider {
   constructor(api, store) {
     this._api = api;
@@ -17,8 +11,10 @@ export default class Provider {
     if (isOnline()) {
       const films = await this._api.getFilms();
 
-      const items = createStoreStructure(films.map(FilmsModel.adaptFilmToServer));
+      const filmsAdaptedToServer = films.map(FilmsModel.adaptFilmToServer);
+      const items = Provider.createStoreStructure(filmsAdaptedToServer);
       this._store.setItems(items);
+      this._store.isSyncRequired = false;
 
       return films;
     }
@@ -31,11 +27,14 @@ export default class Provider {
   async updateFilm(film, { isServerUpdate = true} = {} ) {
     if (isOnline()) {
       const updatedFilm = isServerUpdate ? await this._api.updateFilm(film) : film;
+
       this._store.setItem(updatedFilm.id, FilmsModel.adaptFilmToServer(updatedFilm));
+
       return updatedFilm;
     }
 
     this._store.setItem(film.id, FilmsModel.adaptFilmToServer({ ...film }));
+    this._store.isSyncRequired = true;
 
     return Promise.resolve(film);
   }
@@ -66,18 +65,28 @@ export default class Provider {
       await this._api.deleteComment(id);
       return;
     }
+
     return Promise.reject(new Error('Delete comment failed'));
   }
 
   async sync() {
     if (isOnline()) {
+      if (!this._store.isSyncRequired) {
+        return;
+      }
+
       const storeFilms = Object.values(this._store.getItems());
+
       const { updated: updatedFilms } = await this._api.sync(storeFilms);
+
       const items = Provider.createStoreStructure([ ...updatedFilms ]);
       this._store.setItems(items);
+      this._store.isSyncRequired = false;
+
       return;
     }
-    return Promise.reject(new Error('Sync data fail'));
+
+    return Promise.reject(new Error('Sync data failed'));
   }
 
   static createStoreStructure(items) {

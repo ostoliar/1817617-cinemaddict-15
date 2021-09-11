@@ -1,12 +1,29 @@
+const PostFix = {
+  ITEMS: 'items',
+  SYNC_REQUIRED: 'sync-required',
+};
+
 export default class Store {
-  constructor(key, storage) {
+  constructor(storeKey, storage) {
     this._storage = storage;
-    this._storeKey = key;
+    this._storeKey = storeKey;
+    this._storeItemsKey = `${this._storeKey}-${PostFix.ITEMS}`;
+    this._storeSyncKey = `${this._storeKey}-${PostFix.SYNC_REQUIRED}`;
+  }
+
+  get isSyncRequired() {
+    const isSyncRequired = this._storage.getItem(this._storeSyncKey);
+    return JSON.parse(isSyncRequired).isSyncRequired || false;
+  }
+
+  set isSyncRequired(required) {
+    const isSyncRequired = JSON.stringify({ isSyncRequired: required });
+    this._storage.setItem(this._storeSyncKey, isSyncRequired);
   }
 
   getItems() {
     try {
-      return JSON.parse(this._storage.getItem(this._storeKey)) || {};
+      return JSON.parse(this._storage.getItem(this._storeItemsKey)) || {};
     } catch (error) {
       return {};
     }
@@ -14,7 +31,7 @@ export default class Store {
 
   setItems(items) {
     this._storage.setItem(
-      this._storeKey,
+      this._storeItemsKey,
       JSON.stringify(items),
     );
   }
@@ -23,22 +40,11 @@ export default class Store {
     const store = this.getItems();
 
     this._storage.setItem(
-      this._storeKey,
+      this._storeItemsKey,
       JSON.stringify({
         ...store,
         [key]: value,
       }),
-    );
-  }
-
-  removeItem(key) {
-    const store = this.getItems();
-
-    delete store[key];
-
-    this._storage.setItem(
-      this._storeKey,
-      JSON.stringify(store),
     );
   }
 }

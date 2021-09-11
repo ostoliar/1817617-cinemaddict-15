@@ -3,7 +3,7 @@ import AbstractObserver from '../utils/abstract-observer.js';
 export default class CommentModel extends AbstractObserver{
   constructor(comments = []) {
     super();
-    this._comments = comments;
+    this._comments = [ ...comments ];
   }
 
   getAll() {
