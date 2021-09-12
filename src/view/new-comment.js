@@ -1,7 +1,7 @@
 import { Emotion, ClassName, NEW_COMMENT_DEFAULT } from '../const.js';
 import SmartView from './smart.js';
 
-const createEmotionInputTemplate = (emotion, isChecked, isDisabled) => {
+const createEmotionInputTemplate = ({ emotion, isChecked, isDisabled }) => {
   const checked = isChecked ? 'checked' : '';
   const inputDisabled = isDisabled ? 'disabled' : '';
   return `
@@ -20,18 +20,20 @@ export const createNewCommentTemplate = ({ text, emotion: currentEmotion, isDisa
       isChecked: emotion === currentEmotion,
     }))
     .join('');
+
   const emojiLabelTemplate = currentEmotion ?
     `<img src="images/emoji/${currentEmotion}.png" width="55" height="55" alt="emoji-smile" />` : '';
+
   const textAreaDisabled = isDisabled ? 'disabled' : '';
   const errorClass = isError ? ClassName.SHAKE : '';
 
   return `
-  <div class="film-details__new-comment ${errorClass}">
+    <div class="film-details__new-comment ${errorClass}">
       <div class="film-details__add-emoji-label">
         ${emojiLabelTemplate}
       </div>
       <label class="film-details__comment-label">
-      <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${textAreaDisabled}>${text}</textarea>
+        <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${textAreaDisabled}>${text}</textarea>
       </label>
       <div class="film-details__emoji-list">
         ${emotionInputsTemplate}
@@ -44,12 +46,10 @@ export default class NewCommentView extends SmartView {
   constructor(newCommentData = NEW_COMMENT_DEFAULT) {
     super();
 
-    this._data = {
-      ...newCommentData,
-    };
+    this._data = { ...newCommentData };
 
     this._commentInputHandler = this._commentInputHandler.bind(this);
-    this._emotionClickHandler = this._emotionClickHandler.bind(this);
+    this._emotionChangeHandler = this._emotionChangeHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -89,7 +89,7 @@ export default class NewCommentView extends SmartView {
     this.updateData({ isDisabled: true });
   }
 
-  _emotionClickHandler(evt) {
+  _emotionChangeHandler(evt) {
     const emotionInput = evt.target.closest(`.${ClassName.FILM_DETAILS_EMOJI_ITEM}`);
     if (!emotionInput || !evt.currentTarget.contains(emotionInput)) {
       return;
@@ -111,7 +111,7 @@ export default class NewCommentView extends SmartView {
   _setInnerHandlers() {
     this.getElement()
       .querySelector(`.${ClassName.FILM_DETAILS_EMOJI_LIST}`)
-      .addEventListener('click', this._emotionClickHandler);
+      .addEventListener('change', this._emotionChangeHandler);
 
     this.getElement()
       .querySelector(`.${ClassName.FILM_DETAILS_TEXTAREA}`)

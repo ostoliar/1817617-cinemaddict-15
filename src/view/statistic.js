@@ -1,10 +1,12 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+
 import { getStatisticsChartData } from '../utils/statistic.js';
-import { ClassName,
-  StatisticPeriodValue, StatisticsPeriodLabel,
-  STAISTICS_CHART_BAR_HEIGHT, STATISTICS_CHART_OPTIONS, STATISCTICS_CHART_TYPE
+import { ClassName, StatisticPeriodValue,
+  StatisticsPeriodLabel, STATISCTICS_CHART_TYPE,
+  STAISTICS_CHART_BAR_HEIGHT, STATISTICS_CHART_OPTIONS
 } from '../const.js';
+
 import SmartView from './smart.js';
 
 const createPeriodInputTemplate = ({ value, checked, label }) => `
@@ -22,7 +24,14 @@ const createPeriodInputTemplate = ({ value, checked, label }) => `
 `;
 
 export const createStatisticsTemplate = (statisticsData) => {
-  const { rank, totalAmount, totalDuration, topGenre, genresStatistic, activePeriodValue = StatisticPeriodValue.ALL} = statisticsData;
+  const {
+    rank,
+    topGenre,
+    totalAmount,
+    totalDuration,
+    genresStatistic,
+    activePeriodValue = StatisticPeriodValue.ALL,
+  } = statisticsData;
 
   const periodInputsTemplate = Object.entries(StatisticPeriodValue)
     .map(([period, value]) => createPeriodInputTemplate({
@@ -53,8 +62,8 @@ export const createStatisticsTemplate = (statisticsData) => {
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Total duration</h4>
           <p class="statistic__item-text">
-            ${totalDuration && totalDuration.hour || 0} <span class="statistic__item-description">h</span>
-            ${totalDuration && totalDuration.minute || 0} <span class="statistic__item-description">m</span>
+            ${totalDuration && totalDuration.hours || 0} <span class="statistic__item-description">h</span>
+            ${totalDuration && totalDuration.minutes || 0} <span class="statistic__item-description">m</span>
           </p>
         </li>
         ${topGenre ? `
@@ -125,8 +134,8 @@ export default class StatisticsView extends SmartView {
     new Chart(statisticsContext, {
       plugins: [ChartDataLabels],
       type: STATISCTICS_CHART_TYPE,
-      data: getStatisticsChartData(genresStatistic),
       options: { ...STATISTICS_CHART_OPTIONS},
+      data: getStatisticsChartData(genresStatistic),
     });
   }
 }

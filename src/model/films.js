@@ -109,4 +109,3 @@ export default class FilmsModel extends AbstractObserver{
     return serverFilm;
   }
 }
-

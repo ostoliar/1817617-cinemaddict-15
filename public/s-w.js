@@ -1,6 +1,7 @@
 const CACHE_PREFIX = 'cinemaddict-cache';
 const CACHE_VER = 'v15';
 const CACHE_NAME = `${CACHE_PREFIX}-${CACHE_VER}`;
+
 const HTTP_STATUS_OK = 200;
 const RESPONSE_SAFE_TYPE = 'basic';
 
@@ -35,7 +36,6 @@ const CACHE_PATHS = [
   '/images/posters/the-great-flamarion.jpg',
   '/images/posters/the-man-with-the-golden-arm.jpg',
 ];
-
 const IGNORE_CACHE_PATH = 'sockjs-node';
 
 const handleCacheKey = (key) => {
@@ -48,46 +48,47 @@ const handleCacheKey = (key) => {
 
 const isNotNull = (key) => key !== null;
 
-const fetchAndCache = (request) => fetch(request).then((response) => {
-  if (!response || response.status !== HTTP_STATUS_OK || response.type !== RESPONSE_SAFE_TYPE) {
+const createCache = async () => {
+  const cache = await caches.open(CACHE_NAME);
+  return await cache.addAll(CACHE_PATHS);
+};
+
+const updateCache = async () => {
+  const keys = await caches.keys();
+  return await Promise.all(keys.map(handleCacheKey).filter(isNotNull));
+};
+
+const fetchAndCache = async (request) => {
+  const response = await fetch(request);
+
+  if (!response ||
+    response.status !== HTTP_STATUS_OK ||
+    response.type !== RESPONSE_SAFE_TYPE) {
     return response;
   }
 
   const clonedResponse = response.clone();
-
-  caches.open(CACHE_NAME)
-    .then((cache) => cache.put(request, clonedResponse));
+  const cache = caches.open(CACHE_NAME);
+  await cache.put(request, clonedResponse);
 
   return response;
-});
+};
 
+const respondWithCache = async (request) => {
+  const cachedResponse = await caches.match(request);
+  return cachedResponse ? cachedResponse : fetchAndCache(request);
+};
 
-self.addEventListener('install', (evt) => {
-  evt.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => cache.addAll(CACHE_PATHS)),
-  );
-});
+self.addEventListener('install', (evt) => evt.waitUntil(createCache()));
 
-self.addEventListener('activate', (evt) => {
-  evt.waitUntil(
-    caches
-      .keys()
-      .then((keys) => Promise.all(keys.map(handleCacheKey).filter(isNotNull))),
-  );
-});
+self.addEventListener('activate', (evt) => evt.waitUntil(updateCache()));
 
 self.addEventListener('fetch', (evt) => {
   const { request } = evt;
+
   if (request.url.includes(IGNORE_CACHE_PATH)) {
     return;
   }
 
-  evt.respondWith(
-    caches
-      .match(request)
-      .then((cacheResponse) => cacheResponse ? cacheResponse : fetchAndCache(request)),
-  );
+  evt.respondWith(respondWithCache(request));
 });
-

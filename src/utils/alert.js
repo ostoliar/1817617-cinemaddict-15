@@ -1,17 +1,28 @@
-const SHOW_TIME = 5000;
+import { createElement } from './render.js';
 
-const alertContainer = document.createElement('div');
-alertContainer.classList.add('alert');
-document.body.append(alertContainer);
+const ALERT_TIME = 3000;
 
-export const alert = (message) => {
-  const alertItem = document.createElement('div');
-  alertItem.textContent = message;
-  alertItem.classList.add('alert-message');
+export const AlertType = {
+  ERROR: 'error',
+  SUCCESS: 'success',
+};
 
-  alertContainer.append(alertItem);
+const getAlertTemplate = (text, { time = ALERT_TIME, type = AlertType.ERROR } = {}) => `
+  <div class="alert alert--${type}" style="animation-duration:${time}ms">
+    <p class="alert__text">${text}</p>
+  </div>
+`;
 
-  setTimeout(() => {
-    alertItem.remove();
-  }, SHOW_TIME);
+const onAlertNodeAnimationEnd = ({ currentTarget }) => {
+  currentTarget.removeEventListener('animationend', onAlertNodeAnimationEnd);
+  currentTarget.remove();
+};
+
+export const alert = (text, options) => {
+  const template = getAlertTemplate(text, options);
+  const alertNode = createElement(template);
+
+  alertNode.addEventListener('animationend', onAlertNodeAnimationEnd);
+
+  document.body.appendChild(alertNode);
 };

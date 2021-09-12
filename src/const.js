@@ -16,6 +16,13 @@ export const MAX_DESCRIPTION_LENGTH = 140;
 
 export const OFFLINE_POSTFIX =  ' [offline]';
 
+export const STORE_PREFIX = 'cinemaddict-localstorage';
+
+export const STORE_VER = 'v15';
+
+export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+
+
 export const KeyCode = {
   ENTER: 'Enter',
   ESCAPE: 'Escape',
