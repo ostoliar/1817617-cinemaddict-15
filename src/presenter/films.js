@@ -115,12 +115,14 @@ export default class FilmsScreenPresenter {
     this._renderMainFilmsList({ update: true });
   }
 
+
   async _handleViewAction(userAction, updateType, updatedFilm) {
     if (userAction === UserAction.UPDATE_USER_DETAILS) {
       updatedFilm = await this._api.updateFilm(updatedFilm);
     }
 
     this._filmsModel.updateFilm(updateType, updatedFilm);
+
   }
 
   _handleModelEvent(updateType, updatedFilm) {

@@ -60,7 +60,9 @@ export default class FilmCardPresenter {
       },
     };
 
+
     this._changeFilm(UserAction.UPDATE_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+
   }
 
   async _handleAddWatchedButtonClick() {
@@ -73,7 +75,9 @@ export default class FilmCardPresenter {
       },
     };
 
+
     this._changeFilm(UserAction.UPDATE_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+
   }
 
   async _handleAddFavoriteButtonClick() {
@@ -86,5 +90,6 @@ export default class FilmCardPresenter {
     };
 
     this._changeFilm(UserAction.UPDATE_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+
   }
 }

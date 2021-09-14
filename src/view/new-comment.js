@@ -49,7 +49,9 @@ export default class NewCommentView extends SmartView {
     this._data = { ...newCommentData };
 
     this._commentInputHandler = this._commentInputHandler.bind(this);
+
     this._emotionChangeHandler = this._emotionChangeHandler.bind(this);
+
 
     this._setInnerHandlers();
   }
@@ -89,7 +91,9 @@ export default class NewCommentView extends SmartView {
     this.updateData({ isDisabled: true });
   }
 
+
   _emotionChangeHandler(evt) {
+
     const emotionInput = evt.target.closest(`.${ClassName.FILM_DETAILS_EMOJI_ITEM}`);
     if (!emotionInput || !evt.currentTarget.contains(emotionInput)) {
       return;
@@ -111,7 +115,9 @@ export default class NewCommentView extends SmartView {
   _setInnerHandlers() {
     this.getElement()
       .querySelector(`.${ClassName.FILM_DETAILS_EMOJI_LIST}`)
+
       .addEventListener('change', this._emotionChangeHandler);
+
 
     this.getElement()
       .querySelector(`.${ClassName.FILM_DETAILS_TEXTAREA}`)
