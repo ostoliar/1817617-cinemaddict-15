@@ -44,15 +44,15 @@ export default class CommentView extends AbstractView {
   }
 
   setDeletingStatus() {
-    const button = this.getElement().querySelector(`.${ClassName.COMMENT_DELETE_BUTTON}`);
-    button.disabled = true;
-    button.textContent = 'Deleting...';
+    this.getElement()
+      .querySelector(`.${ClassName.COMMENT_DELETE_BUTTON}`)
+      .textContent = 'Deleting...';
   }
 
   resetDeletingStatus() {
-    const button = this.getElement().querySelector(`.${ClassName.COMMENT_DELETE_BUTTON}`);
-    button.disabled = false;
-    button.textContent = 'Delete';
+    this.getElement()
+      .querySelector(`.${ClassName.COMMENT_DELETE_BUTTON}`)
+      .textContent = 'Delete';
   }
 
   setDeleteButtonClickHandler(callback) {

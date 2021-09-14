@@ -28,12 +28,6 @@ export const KeyCode = {
   ESCAPE: 'Escape',
 };
 
-export const UserAction = {
-  UPDATE_USER_DETAILS: 'update-user-details',
-  CREATE_COMMENT: 'create-comment',
-  DELETE_COMMENT: 'delete-comment',
-};
-
 export const Data = {
   FILM_INFO: 'film_info',
   ALTERNATIVE_TITLE: 'alternative_title',

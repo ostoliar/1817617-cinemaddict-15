@@ -1195,9 +1195,8 @@ button {
   padding-top: 50px;
   padding-bottom: 50px;
 }
-
 .shake {
-  animation: shake 0.6s forwards;
+  animation: shake 0.8s forwards;
 }
 
 @keyframes shake {
@@ -1220,50 +1219,5 @@ button {
   60%,
   80% {
     transform: translateX(10px);
-  }
-}
-
-
-.alert {
-  position: fixed;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 0 1rem;
-
-  animation: show-and-hide ease-in-out forwards;
-}
-
-.alert--success {
-  background-color: #6fd656;
-}
-
-.alert--error {
-  background-color: #ff4e4e;
-}
-
-.alert__text {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-@keyframes show-and-hide {
-  0% {
-    transform: translateY(-100%);
-  }
-
-  10% {
-    transform: translateY(0);
-  }
-
-  95% {
-    transform: translateY(0);
-  }
-
-  100% {
-    transform: translateY(-100%);
   }
 }
