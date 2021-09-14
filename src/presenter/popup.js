@@ -1,3 +1,4 @@
+
 import { UpdateType, CommentsTitle, UserAction } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { isEsc, isEnter, isOnline } from '../utils/common.js';
@@ -98,6 +99,7 @@ export default class FilmDetailsPresenter {
     };
 
     this._changeFilm(UserAction.UPDATE_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+
   }
 
   async _handleAddWatchedButtonClick() {
@@ -197,6 +199,7 @@ export default class FilmDetailsPresenter {
     }
   }
 
+
   _handleFilmsModelEvent(updateType, updatedFilm) {
     switch (updateType) {
       case UpdateType.PATCH:
@@ -225,6 +228,7 @@ export default class FilmDetailsPresenter {
         }
         break;
     }
+
   }
 
   _renderFilmInfo() {
@@ -279,11 +283,13 @@ export default class FilmDetailsPresenter {
       return;
     }
 
+
     const prevCommentsListView = this._commentsListView;
     this._commentsListView = new CommentsListView();
     rerender(this._commentsListView, prevCommentsListView, this._commentsContainerView);
 
     this._commentsModel.getAll().forEach((comment) => {
+
       const commentView = new CommentView(comment);
       this._commentView.set(comment.id, commentView);
       commentView.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
