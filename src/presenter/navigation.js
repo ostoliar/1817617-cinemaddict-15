@@ -4,16 +4,20 @@ import { filter } from '../utils/card.js';
 import NavigationView from '../view/navigation.js';
 
 export default class NavigationPresenter {
-  constructor(navigationContainer, filterModel, filmsModel, renderScreen) {
-    this._navigationContainer = navigationContainer;
+  constructor({ container, filterModel, filmsModel, renderScreen }) {
+    this._navigationContainer = container;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
     this._renderScreen = renderScreen;
+
     this._activeItem = FilterType.ALL;
+
     this._navigationView = null;
+
     this._handleFilterChange = this._handleFilterChange.bind(this);
     this._handleStatisticClick = this._handleStatisticClick.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
+
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
   }
@@ -22,8 +26,9 @@ export default class NavigationPresenter {
     const prevNavigationView = this._navigationView;
 
     this._navigationView = new NavigationView(this._getFilters(), this._activeItem);
+
     this._navigationView.setFilterChangeHandler(this._handleFilterChange);
-    this._navigationView.setStatisticClickHandler(this._handleStatisticClick);
+    this._navigationView.setStatisticsClickHandler(this._handleStatisticClick);
 
     rerender(this._navigationView, prevNavigationView, this._navigationContainer);
   }
@@ -89,7 +94,7 @@ export default class NavigationPresenter {
       return;
     }
 
-    if (updateType === UpdateType.MINOR) {
+    if (updateType === UpdateType.INIT || updateType === UpdateType.MINOR) {
       this._resetFilters();
     }
 

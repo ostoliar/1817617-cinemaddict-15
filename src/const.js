@@ -6,7 +6,7 @@ export const siteMainElement = document.querySelector('.main');
 
 export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
 
-export const AUTHORIZATION = 'Basic s7fgq77r28d';
+export const AUTHORIZATION = 'Basic s7fgq77r28dlskdfji76';
 
 export const FILMS_STEP = 5;
 
@@ -14,9 +14,24 @@ export const EXTRA_FILMS_AMOUNT = 2;
 
 export const MAX_DESCRIPTION_LENGTH = 140;
 
+export const OFFLINE_POSTFIX =  ' [offline]';
+
+export const STORE_PREFIX = 'cinemaddict-localstorage';
+
+export const STORE_VER = 'v15';
+
+export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+
+
 export const KeyCode = {
   ENTER: 'Enter',
   ESCAPE: 'Escape',
+};
+
+export const UserAction = {
+  UPDATE_USER_DETAILS: 'update-user-details',
+  CREATE_COMMENT: 'create-comment',
+  DELETE_COMMENT: 'delete-comment',
 };
 
 export const Data = {
@@ -62,6 +77,8 @@ export const FilmsListOption = {
 };
 
 export const NEW_COMMENT_DEFAULT = {
+  isError: false,
+  isDisabled: false,
   text: '',
   emotion: '',
 };
@@ -80,8 +97,8 @@ export const NavigationItem = {
 
 export const FilteredEmptyListTitle = {
   WATCHLIST: 'There ara no movies to watch now',
-  HISTORY: 'There ara no movies to watch now',
-  FAVORITES: 'There ara no movies to watch now',
+  HISTORY: 'There are no watched movies now',
+  FAVORITES: 'There are no favorite movies now',
 };
 
 export const EmptyBoardTitle = {
@@ -99,6 +116,7 @@ export const UpdateType = {
   PATCH: 'patch',
   MINOR: 'minor',
   MAJOR: 'major',
+  INIT: 'init',
 };
 
 export const Screen = {

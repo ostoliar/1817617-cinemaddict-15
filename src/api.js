@@ -1,4 +1,5 @@
 import FilmsModel from './model/films.js';
+import CommentModel from './model/comment.js';
 
 const Method = {
   GET: 'GET',
@@ -19,8 +20,12 @@ export default class Api {
   }
 
   async getFilms() {
-    const response = await this._load({url: 'movies'});
+    const response = await this._load({
+      url: 'movies',
+    });
+
     const films = await Api.toJSON(response);
+
     return films.map(FilmsModel.adaptFilmToClient);
   }
 
@@ -29,45 +34,55 @@ export default class Api {
       url: `movies/${film.id}`,
       method: Method.PUT,
       body: JSON.stringify(FilmsModel.adaptFilmToServer(film)),
-      headers: new Headers({'Content-Type': 'application/json'}),
     });
+
     const updatedFilm = await Api.toJSON(response);
 
     return FilmsModel.adaptFilmToClient(updatedFilm);
   }
 
-  async getComments(film) {
+  async getComments(filmId) {
     const response = await this._load({
-      url: `comments/${film.id}`,
+      url: `comments/${filmId}`,
       method: Method.GET,
-      headers: new Headers({'Content-Type': 'application/json'}),
     });
 
     const comments = await Api.toJSON(response);
 
-    return comments.map(FilmsModel.adaptCommentToClient);
+    return comments.map(CommentModel.adaptCommentToClient);
   }
 
-  async addComment(filmId, newComment) {
+
+  async addComment({ filmId, newComment }) {
     const response = await this._load({
       url: `comments/${filmId}`,
       method: Method.POST,
-      body: JSON.stringify(FilmsModel.adaptNewCommentToServer(newComment)),
-      headers: new Headers({'Content-Type': 'application/json'}),
+      body: JSON.stringify(CommentModel.adaptNewCommentToServer(newComment)),
     });
+
     const { movie, comments } = await Api.toJSON(response);
-    const adaptedResponse = {
+
+    return {
       updatedFilm: FilmsModel.adaptFilmToClient(movie),
-      updatedComments: comments.map(FilmsModel.adaptCommentToClient),
+      updatedComments: comments.map(CommentModel.adaptCommentToClient),
     };
-    return adaptedResponse;
   }
 
-  async deleteComment(id) {
+  async deleteComment(commentId) {
     await this._load({
-      url: `comments/${id}`,
+      url: `comments/${commentId}`,
       method: Method.DELETE,
     });
+  }
+
+  async sync(films) {
+    const response = await this._load({
+      url: '/movies/sync',
+      method: Method.POST,
+      body: JSON.stringify(films),
+    });
+
+    return await Api.toJSON(response);
   }
 
   async _load({
@@ -76,12 +91,12 @@ export default class Api {
     body = null,
     headers = new Headers(),
   }) {
+    headers.append('Content-Type', 'application/json');
     headers.append('Authorization', this._authorization);
 
-    const response = await fetch(
-      `${this._endPoint}/${url}`,
-      {method, body, headers},
-    );
+    const fetchUrl = `${this._endPoint}/${url}`;
+    const fetchOptions = { method, body, headers };
+    const response = await fetch(fetchUrl, fetchOptions);
 
     return Api.checkStatus(response);
   }
@@ -89,7 +104,7 @@ export default class Api {
   static checkStatus(response) {
     if (
       response.status < SuccessHTTPStatusRange.MIN ||
-        response.status > SuccessHTTPStatusRange.MAX
+      response.status > SuccessHTTPStatusRange.MAX
     ) {
       throw new Error(`${response.status}: ${response.statusText}`);
     }
@@ -99,9 +114,5 @@ export default class Api {
 
   static toJSON(response) {
     return response.json();
-  }
-
-  static catchError(err) {
-    throw err;
   }
 }

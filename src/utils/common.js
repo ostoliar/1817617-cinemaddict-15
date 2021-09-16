@@ -27,8 +27,8 @@ export const getUniqueItemsFromArray = (items, maxUniqueAmount, minUniqueAmount 
   return Array.from(itemsSet);
 };
 
-export const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
+export const updateItem = (items, updatedItem) => {
+  const index = items.findIndex((item) => item.id === updatedItem.id);
 
   if (index === -1) {
     return items;
@@ -36,8 +36,10 @@ export const updateItem = (items, update) => {
 
   return [
     ...items.slice(0, index),
-    update,
+    updatedItem,
     ...items.slice(index + 1),
   ];
 };
+
+export const isOnline = () => window.navigator.onLine;
 

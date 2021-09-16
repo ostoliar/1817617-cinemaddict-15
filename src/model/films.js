@@ -3,10 +3,11 @@ import { sortByRating, sortByComments, hasComments, hasRating } from '../utils/c
 import AbstractObserver from '../utils/abstract-observer.js';
 import { Data } from '../const.js';
 
-export default class FilmsModel extends AbstractObserver {
+export default class FilmsModel extends AbstractObserver{
   constructor(films = []) {
     super();
-    this._films = films;
+
+    this._films = [ ...films ];
   }
 
   getAll() {
@@ -14,13 +15,13 @@ export default class FilmsModel extends AbstractObserver {
   }
 
   getTopRated() {
-    return [...this._films]
+    return [ ...this._films ]
       .filter(hasRating)
       .sort(sortByRating);
   }
 
   getMostCommented() {
-    return [...this._films]
+    return [ ...this._films ]
       .filter(hasComments)
       .sort(sortByComments);
   }
@@ -78,9 +79,11 @@ export default class FilmsModel extends AbstractObserver {
       ...film.filmInfo,
       [Data.ALTERNATIVE_TITLE]: film.filmInfo.originalTitle,
       genre: [ ...film.filmInfo.genres],
-      [Data.AGE_RATING]: film.filmInfo.ageRating,
-      [Data.TOTAL_RATING]: film.filmInfo.rating,
-      poster: `'images/posters/'${film.filmInfo.poster}`,
+
+      ['age_rating']: film.filmInfo.ageRating,
+      ['total_rating']: film.filmInfo.rating,
+      poster: `images/posters/${film.filmInfo.poster}`,
+
     };
 
     serverFilm[Data.FILM_INFO].release = {
@@ -107,16 +110,5 @@ export default class FilmsModel extends AbstractObserver {
     delete serverFilm.userDetails;
 
     return serverFilm;
-  }
-
-  static adaptCommentToClient(comment) {
-    const clientComment = { ...comment };
-
-    clientComment.text = comment.comment;
-    clientComment.date = new Date(comment.date);
-
-    delete clientComment.comment;
-
-    return clientComment;
   }
 }

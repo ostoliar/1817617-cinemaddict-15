@@ -1,6 +1,6 @@
 import { render, remove, replace, rerender } from '../utils/render.js';
 import { sortByRating, sortByDate, filter } from '../utils/card.js';
-import { FilmsListOption, SortType, ClassName, UpdateType, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT, bodyElement
+import { FilmsListOption, SortType, ClassName, UpdateType, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT, bodyElement, UserAction
 } from '../const.js';
 import SortView from '../view/filter.js';
 import BoardView from '../view/board.js';
@@ -11,14 +11,16 @@ import FilmCardPresenter from './card.js';
 import FilmDetailsPresenter from './popup.js';
 
 
-export default class FilmsPresenter {
-  constructor(mainScreenContainer, filmsModel, filterModel, api) {
-    this._mainScreenContainer = mainScreenContainer;
+export default class FilmsScreenPresenter {
+  constructor({ container, filmsModel, filterModel, api }) {
+    this._mainScreenContainer = container;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._api = api;
+
     this._mainFilmsCount = FILMS_STEP;
-    this._sortView = null;
+
+    this._sortBarView = null;
     this._filmsBoardView = null;
     this._mainFilmsContainerView = null;
     this._mainFilmsListView = null;
@@ -27,12 +29,15 @@ export default class FilmsPresenter {
     this._topRatedFilmsListView = null;
     this._mostCommentedFilmsContainerView = null;
     this._mostCommentedFilmsListView = null;
-    this._mainFilmPresenter = new Map();
-    this._topRatedFilmPresenter = new Map();
-    this._mostCommentedFilmPresenter = new Map();
+
+    this._mainFilmPresenters = new Map();
+    this._topRatedFilmPresenters = new Map();
+    this._mostCommentedFilmPresenters = new Map();
     this._filmDetailsPresenter = null;
+
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
+
     this._showFilmDetails = this._showFilmDetails.bind(this);
     this._hideFilmDetails = this._hideFilmDetails.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
@@ -42,8 +47,10 @@ export default class FilmsPresenter {
   init() {
     this._mainFilmsCount = FILMS_STEP;
     this._currentSortType = SortType.DEFAULT;
+
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
     this._renderMainScreen();
   }
 
@@ -51,9 +58,9 @@ export default class FilmsPresenter {
     this._filmsModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
 
-    if (this._sortView) {
-      remove(this._sortView);
-      this._sortView = null;
+    if (this._sortBarView) {
+      remove(this._sortBarView);
+      this._sortBarView = null;
     }
 
     if (this._filmsBoardView) {
@@ -108,19 +115,25 @@ export default class FilmsPresenter {
     this._renderMainFilmsList({ update: true });
   }
 
-  _handleViewAction(updateType, payload) {
-    this._filmsModel.updateFilm(updateType, payload);
+
+  async _handleViewAction(userAction, updateType, updatedFilm) {
+    if (userAction === UserAction.UPDATE_USER_DETAILS) {
+      updatedFilm = await this._api.updateFilm(updatedFilm);
+    }
+
+    this._filmsModel.updateFilm(updateType, updatedFilm);
+
   }
 
   _handleModelEvent(updateType, updatedFilm) {
     switch (updateType) {
       case UpdateType.PATCH:
-        if (this._mainFilmPresenter.has(updatedFilm.id)) {
-          this._mainFilmPresenter.get(updatedFilm.id).init(updatedFilm);
+        if (this._mainFilmPresenters.has(updatedFilm.id)) {
+          this._mainFilmPresenters.get(updatedFilm.id).init(updatedFilm);
         }
 
-        if (this._topRatedFilmPresenter.has(updatedFilm.id)) {
-          this._topRatedFilmPresenter.get(updatedFilm.id).init(updatedFilm);
+        if (this._topRatedFilmPresenters.has(updatedFilm.id)) {
+          this._topRatedFilmPresenters.get(updatedFilm.id).init(updatedFilm);
         }
 
         this._renderExtraFilmsList({
@@ -150,14 +163,26 @@ export default class FilmsPresenter {
 
   _showFilmDetails(film) {
     if (this._filmDetailsPresenter &&
-          this._filmDetailsPresenter.filmId !== film.id) {
+        this._filmDetailsPresenter.filmId !== film.id) {
       this._filmDetailsPresenter.destroy();
-      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._filmsModel, this._handleViewAction, this._hideFilmDetails, this._api);
+      this._filmDetailsPresenter = new FilmDetailsPresenter({
+        api: this._api,
+        container: bodyElement,
+        filmsModel: this._filmsModel,
+        changeFilm: this._handleViewAction,
+        hideFilmDetails: this._hideFilmDetails,
+      });
     }
 
     if (!this._filmDetailsPresenter) {
       bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
-      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._filmsModel, this._handleViewAction, this._hideFilmDetails, this._api);
+      this._filmDetailsPresenter = new FilmDetailsPresenter({
+        api: this._api,
+        container: bodyElement,
+        filmsModel: this._filmsModel,
+        changeFilm: this._handleViewAction,
+        hideFilmDetails: this._hideFilmDetails,
+      });
     }
 
     this._filmDetailsPresenter.init(film);
@@ -170,17 +195,23 @@ export default class FilmsPresenter {
   }
 
   _renderSortBar() {
-    const prevSortBarView = this._sortView;
-    this._sortView = new SortView(this._currentSortType);
-    this._sortView.setSortTypeChangeHandler(this._handleSortTypeChange);
+    const prevSortBarView = this._sortBarView;
+    this._sortBarView = new SortView(this._currentSortType);
+    this._sortBarView.setSortTypeChangeHandler(this._handleSortTypeChange);
 
-    rerender(this._sortView, prevSortBarView, this._mainScreenContainer);
+    rerender(this._sortBarView, prevSortBarView, this._mainScreenContainer);
   }
 
   _renderFilmCard(filmCardContainer, film, type) {
-    const filmCardPresenter = new FilmCardPresenter(filmCardContainer, this._handleViewAction, this._showFilmDetails, this._api);
+    const filmCardPresenter = new FilmCardPresenter({
+      api: this._api,
+      container: filmCardContainer,
+      changeFilm: this._handleViewAction,
+      showFilmDetails: this._showFilmDetails,
+    });
+
     filmCardPresenter.init(film);
-    this[`_${type}FilmPresenter`].set(film.id, filmCardPresenter);
+    this[`_${type}FilmPresenters`].set(film.id, filmCardPresenter);
   }
 
   _renderPartialMainFilms(from, to) {
@@ -202,7 +233,7 @@ export default class FilmsPresenter {
     this._mainFilmsContainerView = new FilmsContainerView();
 
     render(this._mainFilmsListView, this._mainFilmsContainerView);
-    this._mainFilmPresenter.clear();
+    this._mainFilmPresenters.clear();
 
     this._renderPartialMainFilms(0, this._mainFilmsCount);
 
@@ -218,7 +249,15 @@ export default class FilmsPresenter {
     const prevExtraFilmsListView = this[`_${type}FilmsListView`];
     const extraFilms = this[`_${type}Films`];
 
-    this[`_${type}FilmPresenter`].clear();
+    this[`_${type}FilmPresenters`].clear();
+
+    if (!extraFilms.length) {
+      if (prevExtraFilmsListView) {
+        remove(prevExtraFilmsListView);
+      }
+
+      return;
+    }
 
     this[`_${type}FilmsListView`] = new FilmsListView(option);
     this[`_${type}FilmsContainerView`] = new FilmsContainerView();
@@ -244,9 +283,9 @@ export default class FilmsPresenter {
       this._mainFilmsCount = FILMS_STEP;
     }
 
-    if (this._sortView) {
-      remove(this._sortView);
-      this._sortView = null;
+    if (this._sortBarView) {
+      remove(this._sortBarView);
+      this._sortBarView = null;
     }
 
     if (this._filmsBoardView) {

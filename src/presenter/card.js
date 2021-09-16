@@ -1,11 +1,11 @@
 import { rerender } from '../utils/render.js';
-import { UpdateType } from '../const.js';
+import { UpdateType, UserAction } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import FilmCardView from '../view/film-card.js';
 
 export default class FilmCardPresenter {
-  constructor(filmCardContainer, changeFilm, showFilmDetails, api) {
-    this._filmCardContainer = filmCardContainer;
+  constructor({ container, changeFilm, showFilmDetails, api }) {
+    this._filmCardContainer = container;
     this._changeFilm = changeFilm;
     this._showFilmDetails = showFilmDetails;
     this._api = api;
@@ -52,7 +52,7 @@ export default class FilmCardPresenter {
   }
 
   async _handleAddToWatchButtonClick() {
-    let updatedFilm = {
+    const updatedFilm = {
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -60,12 +60,11 @@ export default class FilmCardPresenter {
       },
     };
 
-    updatedFilm = await this._api.updateFilm(updatedFilm);
-    this._changeFilm(UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UserAction.UPDATE_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
   async _handleAddWatchedButtonClick() {
-    let updatedFilm ={
+    const updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -74,12 +73,11 @@ export default class FilmCardPresenter {
       },
     };
 
-    updatedFilm = await this._api.updateFilm(updatedFilm);
-    this._changeFilm(UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UserAction.UPDATE_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
   async _handleAddFavoriteButtonClick() {
-    let updatedFilm ={
+    const updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -87,7 +85,6 @@ export default class FilmCardPresenter {
       },
     };
 
-    updatedFilm = await this._api.updateFilm(updatedFilm);
-    this._changeFilm(UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UserAction.UPDATE_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 }
