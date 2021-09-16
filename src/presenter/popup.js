@@ -13,45 +13,56 @@ import NewCommentView from '../view/new-comment.js';
 import CommentModel from '../model/comment.js';
 import { alert } from '../utils/alert.js';
 
+
 export default class FilmDetailsPresenter {
-  constructor(filmDetailsContainer, filmsModel, changeFilm, hideFilmDetails, api) {
-    this._filmDetailsContainer = filmDetailsContainer;
+  constructor({ container, filmsModel, changeFilm, hideFilmDetails, api }) {
+    this._filmDetailsContainer = container;
     this._filmsModel = filmsModel;
     this._changeFilm = changeFilm;
     this._hideFilmDetails = hideFilmDetails;
     this._api = api;
+
     this._film = null;
     this._isLoading = true;
-    this._commentsModel = new CommentModel();
     this._isError = false;
     this._prevScrollTop = 0;
+
+    this._commentsModel = new CommentModel();
+
     this._filmDetailsView = null;
     this._filmDetailsBottomView = null;
     this._commentsContainerView = null;
     this._commentsTitleView = null;
     this._commentsListView = null;
-    this._commentView = new Map();
+    this._commentViews = new Map();
     this._newCommentView = null;
+
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleDocumentKeydown = this._handleDocumentKeydown.bind(this);
+
     this._handleAddToWatchButtonClick = this._handleAddToWatchButtonClick.bind(this);
     this._handleAddWatchedButtonClick = this._handleAddWatchedButtonClick.bind(this);
     this._handleAddFavoriteButtonClick = this._handleAddFavoriteButtonClick.bind(this);
+
     this._handleDeleteButtonClick = this._handleDeleteButtonClick.bind(this);
     this._handleNewCommentFormSubmit = this._handleNewCommentFormSubmit.bind(this);
     this._handleCommentsViewAction = this._handleCommentsViewAction.bind(this);
+
     this._handleFilmsModelEvent = this._handleFilmsModelEvent.bind(this);
     this._handleCommentsModelEvent = this._handleCommentsModelEvent.bind(this);
+
     this._filmsModel.addObserver(this._handleFilmsModelEvent);
     this._commentsModel.addObserver(this._handleCommentsModelEvent);
   }
 
-  init(film, { loadComments = true } = {}) {
+  init(film, { isLoadComments = true } = {}) {
     this._film = film;
-    this._isLoading = loadComments;
+    this._isLoading = isLoadComments;
+
     this._commentsTitleView = null;
     this._commentsListView = null;
-    this._commentView = new Map();
+    this._commentViews = new Map();
+
     this._renderFilmDetails();
   }
 
@@ -66,7 +77,7 @@ export default class FilmDetailsPresenter {
       return this._film.id;
     }
 
-    throw new Error('Presenter not initialized');
+    throw new Error('Film Presenter has not been initialized');
   }
 
   get _isSuccess() {
@@ -99,7 +110,6 @@ export default class FilmDetailsPresenter {
     };
 
     this._changeFilm(UserAction.UPDATE_USER_DETAILS, UpdateType.MINOR, updatedFilm);
-
   }
 
   async _handleAddWatchedButtonClick() {
@@ -129,29 +139,32 @@ export default class FilmDetailsPresenter {
 
   async _handleDeleteButtonClick(commentId) {
     if (!isOnline()) {
-      alert('You can not delete comment couse you are offline now');
+      alert('You can not delete comment in offline mode');
       return;
     }
+
     try {
-      this._commentView.get(commentId).setDeletingStatus();
+      this._commentViews.get(commentId).setDeletingStatus();
       await this._handleCommentsViewAction(UserAction.DELETE_COMMENT, UpdateType.PATCH, commentId);
 
     } catch (error) {
-      this._commentView.get(commentId).resetDeletingStatus();
+      this._commentViews.get(commentId).resetDeletingStatus();
     }
 
   }
 
-
   async _handleNewCommentFormSubmit() {
     if (!isOnline()) {
       this._newCommentView.setErrorState();
-      alert('You can not delete comment couse you are offline now');
+      alert('You can not add comment in offline mode');
       return;
     }
+
+
     try {
       this._newCommentView.disable();
       this._newCommentView.clearErrorState();
+
       await this._handleCommentsViewAction(
         UserAction.CREATE_COMMENT,
         UpdateType.PATCH,
@@ -165,6 +178,7 @@ export default class FilmDetailsPresenter {
     } catch (error) {
       this._newCommentView.setErrorState();
     }
+
     this._newCommentView.enable();
   }
 
@@ -199,7 +213,6 @@ export default class FilmDetailsPresenter {
     }
   }
 
-
   _handleFilmsModelEvent(updateType, updatedFilm) {
     switch (updateType) {
       case UpdateType.PATCH:
@@ -211,33 +224,39 @@ export default class FilmDetailsPresenter {
     }
   }
 
-  _handleCommentsModelEvent(updateType, updatedPayload) {
+  _handleCommentsModelEvent(updateType, payload) {
     switch (updateType) {
       case UpdateType.INIT:
         this._renderCommentsTitle();
         this._renderCommentsList();
         this._renderNewComment();
         break;
+
       case UpdateType.PATCH:
         this._renderCommentsTitle();
-        if (Array.isArray(updatedPayload)) {
+
+        if (Array.isArray(payload)) {
           this._renderCommentsList();
         } else {
-          remove(this._commentView.get(updatedPayload));
-          this._commentView.delete(updatedPayload);
+          remove(this._commentViews.get(payload));
+          this._commentViews.delete(payload);
         }
+
         break;
     }
-
   }
 
   _renderFilmInfo() {
     const prevFilmDetailsView = this._filmDetailsView;
+
     this._filmDetailsView = new FilmDetailsView(this._film);
+
     this._filmDetailsView.setCloseButtonClickHandler(this._handleCloseButtonClick);
+
     this._filmDetailsView.setAddToWatchButtonClickHandler(this._handleAddToWatchButtonClick);
     this._filmDetailsView.setAddWatchedButtonClickHandler(this._handleAddWatchedButtonClick);
     this._filmDetailsView.setAddFavoriteButtonClickHandler(this._handleAddFavoriteButtonClick);
+
     rerender(this._filmDetailsView, prevFilmDetailsView, this._filmDetailsContainer);
 
     if (!prevFilmDetailsView) {
@@ -247,13 +266,14 @@ export default class FilmDetailsPresenter {
 
   _renderFilmsBottom() {
     this._filmDetailsBottomView = new FilmDetailsBottomView();
+
     this._renderCommentsContainer();
     this._renderCommentsTitle();
     this._renderCommentsList();
     this._renderNewComment();
+
     render(this._filmDetailsView, this._filmDetailsBottomView);
   }
-
 
   _renderCommentsContainer() {
     this._commentsContainerView = new CommentsContainerView();
@@ -283,15 +303,13 @@ export default class FilmDetailsPresenter {
       return;
     }
 
-
     const prevCommentsListView = this._commentsListView;
     this._commentsListView = new CommentsListView();
     rerender(this._commentsListView, prevCommentsListView, this._commentsContainerView);
 
     this._commentsModel.getAll().forEach((comment) => {
-
       const commentView = new CommentView(comment);
-      this._commentView.set(comment.id, commentView);
+      this._commentViews.set(comment.id, commentView);
       commentView.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
       render(this._commentsListView, commentView);
     });
@@ -307,6 +325,7 @@ export default class FilmDetailsPresenter {
 
   async _renderFilmDetails() {
     this._prevScrollTop = this._filmDetailsView ? this._filmDetailsView.scrollTop : 0;
+
     this._renderFilmInfo();
     this._renderFilmsBottom();
 
