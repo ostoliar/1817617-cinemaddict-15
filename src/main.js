@@ -38,5 +38,5 @@ window.addEventListener('online', onWindowOnline);
 window.addEventListener('offline', onWindowOffline);
 
 window.addEventListener('load', () => {
-  navigator.serviceWorker.register('/sw.js');
+  navigator.serviceWorker.register('/s-w.js');
 });
