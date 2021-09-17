@@ -79,9 +79,11 @@ export default class FilmsModel extends AbstractObserver{
       ...film.filmInfo,
       [Data.ALTERNATIVE_TITLE]: film.filmInfo.originalTitle,
       genre: [ ...film.filmInfo.genres],
-      [Data.AGE_RATING]: film.filmInfo.ageRating,
-      [Data.TOTAL_RATING]: film.filmInfo.rating,
-      poster: `'images/posters/'${film.filmInfo.poster}`,
+
+      ['age_rating']: film.filmInfo.ageRating,
+      ['total_rating']: film.filmInfo.rating,
+      poster: `images/posters/${film.filmInfo.poster}`,
+
     };
 
     serverFilm[Data.FILM_INFO].release = {

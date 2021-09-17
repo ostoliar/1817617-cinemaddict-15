@@ -6,7 +6,7 @@ export const siteMainElement = document.querySelector('.main');
 
 export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
 
-export const AUTHORIZATION = 'Basic s7fgq77r28d';
+export const AUTHORIZATION = 'Basic s7fgq77r28dlskdfji76';
 
 export const FILMS_STEP = 5;
 
@@ -26,6 +26,12 @@ export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 export const KeyCode = {
   ENTER: 'Enter',
   ESCAPE: 'Escape',
+};
+
+export const UserAction = {
+  UPDATE_USER_DETAILS: 'update-user-details',
+  CREATE_COMMENT: 'create-comment',
+  DELETE_COMMENT: 'delete-comment',
 };
 
 export const Data = {

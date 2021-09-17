@@ -1,4 +1,5 @@
-import { UpdateType, UserAction, CommentsTitle } from '../const.js';
+
+import { UpdateType, CommentsTitle, UserAction } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { isEsc, isEnter, isOnline } from '../utils/common.js';
 import { render, rerender, remove } from '../utils/render.js';
@@ -11,6 +12,7 @@ import CommentView from '../view/comment.js';
 import NewCommentView from '../view/new-comment.js';
 import CommentModel from '../model/comment.js';
 import { alert } from '../utils/alert.js';
+
 
 export default class FilmDetailsPresenter {
   constructor({ container, filmsModel, changeFilm, hideFilmDetails, api }) {
