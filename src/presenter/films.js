@@ -122,7 +122,6 @@ export default class FilmsScreenPresenter {
     }
 
     this._filmsModel.updateFilm(updateType, updatedFilm);
-
   }
 
   _handleModelEvent(updateType, updatedFilm) {

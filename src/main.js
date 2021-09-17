@@ -21,17 +21,19 @@ const onWindowOffline = () => {
   alert('Offline mode');
 };
 
+const onWindowOnline = () => {
+  document.title = document.title.replace(OFFLINE_POSTFIX, '');
+  alert('Online mode', { type: AlertType.SUCCESS });
+  provider.sync();
+};
+
 if (!isOnline()) {
   onWindowOffline();
 }
 
 applicationPresenter.init();
 
-window.addEventListener('online', () => {
-  document.title = document.title.replace(OFFLINE_POSTFIX, '');
-  alert('Online mode', { type: AlertType.SUCCESS });
-  provider.sync();
-});
+window.addEventListener('online', onWindowOnline);
 
 window.addEventListener('offline', onWindowOffline);
 

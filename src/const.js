@@ -6,7 +6,9 @@ export const siteMainElement = document.querySelector('.main');
 
 export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
 
-export const AUTHORIZATION = 'Basic s7fgq77r28dlskdfji76';
+const TOKEN = 'Basic s7fgq77r28dlskdfji76';
+
+export const AUTHORIZATION = TOKEN;
 
 export const FILMS_STEP = 5;
 

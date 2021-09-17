@@ -57,7 +57,6 @@ export default class App {
 
     render(this._mainView, this._emptyBoardView);
 
-    // render(this._applicationContainer, this._footerView, RenderPlace.AFTER_BEGIN);
     render(this._applicationContainer, this._mainView, RenderPlace.AFTER_BEGIN);
     render(this._applicationContainer, this._headerView, RenderPlace.AFTER_BEGIN);
     render(this._applicationContainer, this._footerStatisticsView);
