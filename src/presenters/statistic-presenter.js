@@ -1,10 +1,10 @@
 import { FilterType, StatisticPeriodValue } from '../const.js';
 import { remove, render } from '../utils/render.js';
-import { filter, isFilmInWatchingPeriod } from '../utils/card.js';
+import { filter, isFilmInWatchingPeriod } from '../utils/film.js';
 import { getWatchedStatisticsData } from '../utils/statistic.js';
-import StatisticsView from '../view/statistic.js';
+import StatisticsView from '../views/statistic.js';
 
-export default class Statistic {
+export default class StatisticPresenter {
   constructor({ container, rankModel, filmsModel }) {
     this._statisticContainer = container;
 

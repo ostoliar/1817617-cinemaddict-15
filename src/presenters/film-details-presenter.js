@@ -3,14 +3,14 @@ import { UpdateType, CommentsTitle, UserAction } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { isEsc, isEnter, isOnline } from '../utils/common.js';
 import { render, rerender, remove } from '../utils/render.js';
-import FilmDetailsView from '../view/film-details.js';
-import FilmDetailsBottomView from '../view/film-details-bottom.js';
-import CommentsContainerView from '../view/comments-container.js';
-import CommentsTitleView from '../view/comments-title.js';
-import CommentsListView from '../view/comments-list.js';
-import CommentView from '../view/comment.js';
-import NewCommentView from '../view/new-comment.js';
-import CommentModel from '../model/comment.js';
+import FilmDetailsView from '../views/film-details.js';
+import FilmDetailsBottomView from '../views/film-details-bottom.js';
+import CommentsContainerView from '../views/comments-container.js';
+import CommentsTitleView from '../views/comments-title.js';
+import CommentsListView from '../views/comments-list.js';
+import CommentView from '../views/comment-view.js';
+import NewCommentView from '../views/new-comment-view.js';
+import CommentModel from '../models/comment-model.js';
 import { alert } from '../utils/alert.js';
 
 

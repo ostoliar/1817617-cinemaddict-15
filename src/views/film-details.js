@@ -1,5 +1,5 @@
 import { ClassName } from '../const.js';
-import { formatRating, formatItems } from '../utils/card.js';
+import { formatRating, formatItems } from '../utils/film.js';
 import { getReleaseDate, getRuntime } from '../utils/date.js';
 
 import AbstractView from './abstract.js';

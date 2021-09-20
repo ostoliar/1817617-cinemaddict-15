@@ -1,17 +1,17 @@
 import { rerender,render, replace, remove } from '../utils/render.js';
-import { filter } from '../utils/card.js';
+import { filter } from '../utils/film.js';
 import { getRanking } from '../utils/statistic.js';
-import EmptyBoardView from '../view/empty-board.js';
-import ProfileView from '../view/profile.js';
-import MainView from '../view/main.js';
-import HeaderView from '../view/header.js';
-import FooterStatisticsView from '../view/footer-statistics.js';
-import RankModel from '../model/ranking.js';
-import FilmsModel from '../model/films.js';
-import FilterModel from '../model/filter.js';
-import NavigationPresenter from './navigation.js';
-import FilmsPresenter from './films.js';
-import StatisticPresenter from './statistic.js';
+import EmptyBoardView from '../views/empty-board.js';
+import ProfileView from '../views/profile.js';
+import MainView from '../views/main.js';
+import HeaderView from '../views/header-view.js';
+import FooterStatisticsView from '../views/footer-statistics-view.js';
+import RankModel from '../models/ranking-model.js';
+import FilmsModel from '../models/films-model.js';
+import FilterModel from '../models/filter-model.js';
+import NavigationPresenter from './navigation-presenter.js';
+import FilmsPresenter from './films-screen-presenter.js';
+import StatisticPresenter from './statistic-presenter.js';
 import { Screen,UpdateType, FilterType, EmptyBoardTitle } from '../const.js';
 
 const RenderPlace = {

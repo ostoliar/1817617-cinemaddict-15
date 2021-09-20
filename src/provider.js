@@ -1,5 +1,5 @@
 import { isOnline } from './utils/common.js';
-import FilmsModel from './model/films.js';
+import FilmsModel from './models/films-model.js';
 
 export default class Provider {
   constructor(api, store) {

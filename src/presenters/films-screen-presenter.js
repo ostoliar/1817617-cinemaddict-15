@@ -1,14 +1,14 @@
 import { render, remove, replace, rerender } from '../utils/render.js';
-import { sortByRating, sortByDate, filter } from '../utils/card.js';
+import { sortByRating, sortByDate, filter } from '../utils/film.js';
 import { FilmsListOption, SortType, ClassName, UpdateType, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT, bodyElement, UserAction
 } from '../const.js';
-import SortView from '../view/filter.js';
-import BoardView from '../view/board.js';
-import FilmsListView from '../view/card-list.js';
-import FilmsContainerView from '../view/films-container.js';
-import ShowMoreButtonView from '../view/show-more.js';
-import FilmCardPresenter from './card.js';
-import FilmDetailsPresenter from './popup.js';
+import SortView from '../views/sort.js';
+import BoardView from '../views/board.js';
+import FilmsListView from '../views/films-list.js';
+import FilmsContainerView from '../views/films-container.js';
+import ShowMoreButtonView from '../views/show-more-button.js';
+import FilmCardPresenter from './film-card-presenter.js';
+import FilmDetailsPresenter from './film-details-presenter.js';
 
 
 export default class FilmsScreenPresenter {

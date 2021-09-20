@@ -1,5 +1,5 @@
 import { updateItem } from '../utils/common.js';
-import { sortByRating, sortByComments, hasComments, hasRating } from '../utils/card.js';
+import { sortByRating, sortByComments, hasComments, hasRating } from '../utils/film.js';
 import AbstractObserver from '../utils/abstract-observer.js';
 import { Data } from '../const.js';
 

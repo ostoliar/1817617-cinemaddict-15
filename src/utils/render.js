@@ -1,4 +1,4 @@
-import Abstract from '../view/abstract.js';
+import Abstract from '../views/abstract.js';
 
 const RenderPlace = {
   BEFORE_END: 'beforeend',

@@ -1,7 +1,7 @@
 import { rerender } from '../utils/render.js';
 import { UpdateType, UserAction } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
-import FilmCardView from '../view/film-card.js';
+import FilmCardView from '../views/film-card.js';
 
 export default class FilmCardPresenter {
   constructor({ container, changeFilm, showFilmDetails, api }) {

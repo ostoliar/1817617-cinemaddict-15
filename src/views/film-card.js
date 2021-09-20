@@ -1,6 +1,6 @@
 import { ClassName } from '../const.js';
 import { getFullYear, getRuntime } from '../utils/date.js';
-import { formatRating, trimDescription } from '../utils/card.js';
+import { formatRating, trimDescription } from '../utils/film.js';
 
 import AbstractView from './abstract.js';
 

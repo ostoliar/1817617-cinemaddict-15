@@ -1,4 +1,4 @@
-import AppPresenter from './presenter/app.js';
+import AppPresenter from './presenters/app.js';
 import { END_POINT, AUTHORIZATION, STORE_NAME, OFFLINE_POSTFIX } from './const.js';
 import Api from './api.js';
 import Store from './store.js';

@@ -7,7 +7,7 @@ import { ClassName, StatisticPeriodValue,
   STAISTICS_CHART_BAR_HEIGHT, STATISTICS_CHART_OPTIONS
 } from '../const.js';
 
-import SmartView from './smart.js';
+import SmartView from './smart-view.js';
 
 const createPeriodInputTemplate = ({ value, checked, label }) => `
   <input

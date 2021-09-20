@@ -1,7 +1,7 @@
 import { FilterType, UpdateType, Screen, NavigationItem } from '../const.js';
 import { rerender } from '../utils/render.js';
-import { filter } from '../utils/card.js';
-import NavigationView from '../view/navigation.js';
+import { filter } from '../utils/film.js';
+import NavigationView from '../views/navigation-view.js';
 
 export default class NavigationPresenter {
   constructor({ container, filterModel, filmsModel, renderScreen }) {
