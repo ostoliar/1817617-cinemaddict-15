@@ -3,8 +3,8 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 import { getStatisticsChartData } from '../utils/statistic.js';
 import { ClassName, StatisticPeriodValue,
-  StatisticsPeriodLabel, STATISCTICS_CHART_TYPE,
-  STAISTICS_CHART_BAR_HEIGHT, STATISTICS_CHART_OPTIONS
+  StatisticsPeriodLabel, STATISTICS_CHART_TYPE,
+  STATISTICS_CHART_BAR_HEIGHT, STATISTICS_CHART_OPTIONS
 } from '../const.js';
 
 import SmartView from './smart-view.js';
@@ -129,11 +129,11 @@ export default class StatisticsView extends SmartView {
 
     const statisticsContext = this.getElement().querySelector(`.${ClassName.STATISTICS_CHART}`);
 
-    statisticsContext.height = STAISTICS_CHART_BAR_HEIGHT * genresStatistic.genres.length;
+    statisticsContext.height = STATISTICS_CHART_BAR_HEIGHT * genresStatistic.genres.length;
 
     new Chart(statisticsContext, {
       plugins: [ChartDataLabels],
-      type: STATISCTICS_CHART_TYPE,
+      type: STATISTICS_CHART_TYPE,
       options: { ...STATISTICS_CHART_OPTIONS},
       data: getStatisticsChartData(genresStatistic),
     });

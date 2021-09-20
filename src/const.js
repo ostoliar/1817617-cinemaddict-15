@@ -1,9 +1,5 @@
 export const bodyElement = document.body;
 
-export const CARD_COUNT_PER_STEP = 5;
-
-export const siteMainElement = document.querySelector('.main');
-
 export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
 
 const TOKEN = 'Basic s7fgq77r28dlskdfji76';
@@ -156,9 +152,9 @@ export const StatisticsPeriodLabel = {
   YEAR: 'Year',
 };
 
-export const STATISCTICS_CHART_TYPE = 'horizontalBar';
+export const STATISTICS_CHART_TYPE = 'horizontalBar';
 
-export const STAISTICS_CHART_BAR_HEIGHT = 50;
+export const STATISTICS_CHART_BAR_HEIGHT = 50;
 
 export const STATISTICS_CHART_OPTIONS = {
   plugins: {
@@ -201,11 +197,6 @@ export const STATISTICS_CHART_OPTIONS = {
   tooltips: {
     enabled: false,
   },
-};
-
-export const SuccessHTTPStatusRange = {
-  MIN: 200,
-  MAX: 299,
 };
 
 export const ClassName = {
